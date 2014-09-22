@@ -27,6 +27,8 @@ public class Main {
 		StmtIterator iterData2 = modelData2.listStatements();
 		
 		Main main = new Main();
+		
+		// intersección de sujetos
 		Set<Resource> set1 = main.getAllSubjects(iter);
 		System.out.println("Total number of subjects: "+ set1.size());
 		System.out.println(" subjects: "+ set1.toString());
@@ -46,6 +48,7 @@ public class Main {
 //		Set commonPredicates = main.intersection(setPredicates1, setPredicates2);		
 //		System.out.println(commonPredicates.toString());
 //		
+		// intersección de objetos
 		iter = model.listStatements();
 		iterData2 = modelData2.listStatements();
 		Set<RDFNode> setObjects1 = main.getAllObjects(iter);
@@ -57,7 +60,10 @@ public class Main {
 		Set commonObjects = main.intersection(setObjects1, setObjects2);		
 		System.out.println(commonObjects.toString());
 		
-
+		Resource subject = ResourceFactory.createResource("http://mayor2.dia.fi.upm.es/oeg-upm/files/dgarijo/motifAnalysis/WfCatalogue-AdditionalVistrailsWfsWithDomainsRevisited.xlsx");
+		Set statements = main.getStatementFrom(modelData2, subject);
+		System.out.println(statements.toString());
+		
 //		
 //		iter = model.listStatements();
 //		iterData2 = modelData2.listStatements();
@@ -148,10 +154,26 @@ public class Main {
         return common;
 	}
 	
-	// devuelve un statement a partir del sujeto
-	public Statement getStatement(Model model, Resource subject){
+	// TODO devuelve un statement a partir del sujeto
+	//TODO refactorizar para que sea genérico el método y devuelva los statements a partir del elemento  que se pase
+	public Set<Statement> getStatementFrom(Model model, Resource subject, Property property, RDFNode object){
+		Set<Statement> set = new HashSet<Statement>();
 		StmtIterator iter = model.listStatements(subject, (Property)null, (RDFNode)null);
-		return null;
+		while (iter.hasNext()){
+			// match the subjects
+			Statement st = iter.next();
+			if (st.getSubject().equals(subject)){
+				System.out.println("SÍ! Sujetos iguales: "+"origen: "+subject + 
+						" destino: "+st.getSubject().toString());
+				System.out.println("statement: "+st.asTriple().toString());
+				set.add(st);
+			}
+			else{
+				System.out.println("NO! Sujetos distintos: "+"origen: "+subject + " destino: "+st.getSubject().toString());
+				
+			}
+		}
+		return set;
 	}
 
 }
