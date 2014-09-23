@@ -1,6 +1,7 @@
 package rdfTurtle;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.jena.riot.Lang;
@@ -22,6 +23,10 @@ public class Main {
 		
 		Model model = RDFDataMgr.loadModel("src/test/resources/root.ttl",Lang.TURTLE) ;
 		StmtIterator iter = model.listStatements();
+		Map<String,String> map = model.getNsPrefixMap();
+
+		System.out.println(map.toString());
+		System.out.println("Lista de keys: "+map.keySet());
 		
 		Model modelData2 = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;
 		StmtIterator iterData2 = modelData2.listStatements();
@@ -156,7 +161,7 @@ public class Main {
 	
 	// TODO devuelve un statement a partir del sujeto
 	//TODO refactorizar para que sea genérico el método y devuelva los statements a partir del elemento  que se pase
-	public Set<Statement> getStatementFrom(Model model, Resource subject, Property property, RDFNode object){
+	public Set<Statement> getStatementFrom(Model model, Resource subject){
 		Set<Statement> set = new HashSet<Statement>();
 		StmtIterator iter = model.listStatements(subject, (Property)null, (RDFNode)null);
 		while (iter.hasNext()){
