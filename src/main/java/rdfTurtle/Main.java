@@ -23,6 +23,7 @@ public class Main {
 		
 		Model model = RDFDataMgr.loadModel("src/test/resources/root.ttl",Lang.TURTLE) ;
 		StmtIterator iter = model.listStatements();
+		
 		Map<String,String> map = model.getNsPrefixMap();
 
 		System.out.println(map.toString());
