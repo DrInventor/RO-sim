@@ -6,7 +6,6 @@ foaf:name "Andreas" ;
 foaf:mbox <mailto:alice@example.org> ;
 foaf:knows :bob ;
 foaf:knows :charlie ;
-foaf:knows :snoopy ;
 .
 :bob
 foaf:name "Bob" ;

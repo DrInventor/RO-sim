@@ -16,3 +16,6 @@ foaf:knows :charlie ;
 foaf:name "Charlie" ;
 foaf:knows :alice ;
 .
+:snoopy
+foaf:name "Snoopy" ;
+foaf:knows :alice ;

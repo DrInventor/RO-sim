@@ -1,11 +1,13 @@
 package similarity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.commons.collections4.IteratorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,8 +70,15 @@ public class StructuralSimilarity {
 	}
 	// statements compartidos por dos modelos
 	public Set<Statement> commonStatements(StmtIterator modelIterator, StmtIterator modelIterator2){
-		List<Statement> list= modelIterator.toList();
-		List<Statement> list2= modelIterator2.toList();
+		//FIXME ¿¿por qué no lo pasa a list??
+		List<Statement> list= new ArrayList<Statement>();
+		while (modelIterator.hasNext())
+			list.add(modelIterator.next());
+		
+						
+		List<Statement> list2 = new ArrayList<Statement>();
+		while (modelIterator2.hasNext())
+			list2.add(modelIterator2.next());
 		
 		Set<Statement> set = new HashSet<Statement>();
 		
@@ -85,8 +94,10 @@ public class StructuralSimilarity {
 	
 	// statement similarity
 	public double statementSimilarity(StmtIterator modelIterator, StmtIterator modelIterator2){
-		int size = modelIterator.toList().size();
-		int size2 = modelIterator2.toList().size();
+		//FIXME ¿¿cómo podemos saber el número de statements??
+		int size = 0 ;//modelIterator.toList().size();
+		
+		int size2 =0 ;//modelIterator2.toList().size();
 		
 		Set<Statement> set = commonStatements(modelIterator, modelIterator2);
 		if (set.size() > 0){
@@ -116,7 +127,7 @@ public class StructuralSimilarity {
 		
 	}
 	
-	// FIXME : esto no funciona porque los iterator se vacían en cada método no puedo combinarlos
+
 	public double computeStructuralSimilarity(Model model, Model model2){
 		StmtIterator iter = model.listStatements();
 		StmtIterator iter2 = model2.listStatements();
@@ -126,6 +137,7 @@ public class StructuralSimilarity {
 		double objetcts = objectSimilarity(iter, iter2);
 		iter = model.listStatements();
 		iter2 = model2.listStatements();
+		//FIXME  ¿¿Cómo pasar el tamaño de la lista??
 		double statements = statementSimilarity(iter, iter2);		
 		return 0.50*statements + 0.30*subjects + 0.20*objetcts;
 	}
