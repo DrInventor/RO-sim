@@ -1,13 +1,11 @@
 package similarity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.commons.collections4.IteratorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,16 +67,15 @@ public class StructuralSimilarity {
 		else return 0;
 	}
 	// statements compartidos por dos modelos
-	public Set<Statement> commonStatements(StmtIterator modelIterator, StmtIterator modelIterator2){
-		//FIXME ¿¿por qué no lo pasa a list??
+	public Set<Statement> commonStatements(List<Statement> modelIterator, List<Statement> modelIterator2){
 		List<Statement> list= new ArrayList<Statement>();
-		while (modelIterator.hasNext())
-			list.add(modelIterator.next());
+		for (Statement st: modelIterator )
+			list.add(st);
 		
 						
 		List<Statement> list2 = new ArrayList<Statement>();
-		while (modelIterator2.hasNext())
-			list2.add(modelIterator2.next());
+		for (Statement st: modelIterator2 )
+			list2.add(st);
 		
 		Set<Statement> set = new HashSet<Statement>();
 		
@@ -93,11 +90,11 @@ public class StructuralSimilarity {
 	}
 	
 	// statement similarity
-	public double statementSimilarity(StmtIterator modelIterator, StmtIterator modelIterator2){
+	public double statementSimilarity(List<Statement> modelIterator, List<Statement> modelIterator2){
 		//FIXME ¿¿cómo podemos saber el número de statements??
-		int size = 0 ;//modelIterator.toList().size();
+		int size = modelIterator.size() ;//modelIterator.toList().size();
 		
-		int size2 =0 ;//modelIterator2.toList().size();
+		int size2 = modelIterator2.size() ;//modelIterator2.toList().size();
 		
 		Set<Statement> set = commonStatements(modelIterator, modelIterator2);
 		if (set.size() > 0){
@@ -132,16 +129,29 @@ public class StructuralSimilarity {
 		StmtIterator iter = model.listStatements();
 		StmtIterator iter2 = model2.listStatements();
 		double subjects = subjectSimilarity(iter, iter2);
+		logger.debug("Subject similarity: "+subjects);
 		iter = model.listStatements();
 		iter2 = model2.listStatements();
-		double objetcts = objectSimilarity(iter, iter2);
-		iter = model.listStatements();
-		iter2 = model2.listStatements();
-		//FIXME  ¿¿Cómo pasar el tamaño de la lista??
-		double statements = statementSimilarity(iter, iter2);		
-		return 0.50*statements + 0.30*subjects + 0.20*objetcts;
+		double objects = objectSimilarity(iter, iter2);
+		logger.debug("Object similarity: "+objects);
+		List<Statement> list= stmt2List(model.listStatements());
+		List<Statement> list2 = stmt2List(model2.listStatements());
+		
+		double statements = statementSimilarity(list, list2);		
+		logger.debug("Statement similarity: "+statements);
+		return 0.50*statements + 0.30*subjects + 0.20*objects;
 	}
 	
+	private List<Statement> stmt2List(StmtIterator listStatements) {
+		// 
+		List<Statement> list = new ArrayList<Statement>();
+		while (listStatements.hasNext()){
+			list.add(listStatements.next());
+		}
+		return list;
+		
+	}
+
 	public Vector<Double> getWeights() {
 		return weights;
 	}
