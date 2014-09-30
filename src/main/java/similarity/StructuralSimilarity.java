@@ -91,11 +91,8 @@ public class StructuralSimilarity {
 	
 	// statement similarity
 	public double statementSimilarity(List<Statement> modelIterator, List<Statement> modelIterator2){
-		//FIXME ¿¿cómo podemos saber el número de statements??
-		int size = modelIterator.size() ;//modelIterator.toList().size();
-		
-		int size2 = modelIterator2.size() ;//modelIterator2.toList().size();
-		
+		int size = modelIterator.size() ;		
+		int size2 = modelIterator2.size() ;		
 		Set<Statement> set = commonStatements(modelIterator, modelIterator2);
 		if (set.size() > 0){
 			double sim = ((size+size2)/set.size())*0.1;
@@ -142,7 +139,7 @@ public class StructuralSimilarity {
 		return 0.50*statements + 0.30*subjects + 0.20*objects;
 	}
 	
-	private List<Statement> stmt2List(StmtIterator listStatements) {
+	protected List<Statement> stmt2List(StmtIterator listStatements) {
 		// 
 		List<Statement> list = new ArrayList<Statement>();
 		while (listStatements.hasNext()){
@@ -209,7 +206,7 @@ public class StructuralSimilarity {
                 count++;
             }           
         }
-        System.out.println("Total number of common: "+ count);
+        logger.debug("Total number of common: "+ count);
         return common;
 	}
 }

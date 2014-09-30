@@ -6,6 +6,8 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -13,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 public class StructuralSimilarityTest {
 
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	private StructuralSimilarity similarity = new StructuralSimilarity();
 	
 	// -----  SUBJECT SIMILARITY 
@@ -47,7 +50,7 @@ public class StructuralSimilarityTest {
 		StmtIterator iter2 = modelData2.listStatements();
 		
 		double sim = similarity.subjectSimilarity(iter, iter2);
-		System.out.println("Similitud de sujetos: "+sim);
+		logger.info("Similitud de sujetos: "+sim);
 		Assert.assertTrue(sim > 0);
 		
 	}
@@ -91,7 +94,7 @@ public class StructuralSimilarityTest {
 		StmtIterator iter2 = modelData2.listStatements();
 		
 		double sim = similarity.objectSimilarity(iter, iter2);
-		System.out.println("Similitud de objetos: "+sim);
+		logger.info("Similitud de objetos: "+sim);
 		Assert.assertTrue(sim > 0);
 		
 	}
@@ -115,10 +118,10 @@ public class StructuralSimilarityTest {
 		StmtIterator iter = model.listStatements();
 		
 		Model modelData2 = RDFDataMgr.loadModel("src/test/resources/data2.ttl",Lang.TURTLE) ;
-		StmtIterator iter2 = modelData2.listStatements();
-		//FIXME arreglar el paso de los iteradores a lista
-//		Set<Statement> set = similarity.commonStatements(iter, iter2);
-//		System.out.println("Set: "+set.toString());
+		StmtIterator iter2 = modelData2.listStatements();		
+		
+		Set<Statement> set = similarity.commonStatements(similarity.stmt2List(iter), similarity.stmt2List(iter2));
+		logger.info("Set: "+set.toString());
 		
 		
 	}
