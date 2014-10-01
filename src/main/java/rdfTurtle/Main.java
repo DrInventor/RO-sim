@@ -67,7 +67,7 @@ public class Main {
 		System.out.println(commonObjects.toString());
 		
 		Resource subject = ResourceFactory.createResource("http://mayor2.dia.fi.upm.es/oeg-upm/files/dgarijo/motifAnalysis/WfCatalogue-AdditionalVistrailsWfsWithDomainsRevisited.xlsx");
-		Set statements = main.getStatementFrom(modelData2, subject);
+		Set statements = main.getStatementFrom(modelData2, subject, null, null);
 		System.out.println(statements.toString());
 		
 //		
@@ -160,23 +160,52 @@ public class Main {
         return common;
 	}
 	
-	// TODO devuelve un statement a partir del sujeto
-	//TODO refactorizar para que sea genérico el método y devuelva los statements a partir del elemento  que se pase
-	public Set<Statement> getStatementFrom(Model model, Resource subject){
+	public Set<Statement> getStatementFrom(Model model, Resource subject, Property predicate, RDFNode object){
 		Set<Statement> set = new HashSet<Statement>();
-		StmtIterator iter = model.listStatements(subject, (Property)null, (RDFNode)null);
+		// retrieve the statement with similar conditions
+		StmtIterator iter = model.listStatements(subject, predicate, object);
 		while (iter.hasNext()){
 			// match the subjects
 			Statement st = iter.next();
-			if (st.getSubject().equals(subject)){
-				System.out.println("SÍ! Sujetos iguales: "+"origen: "+subject + 
-						" destino: "+st.getSubject().toString());
-				System.out.println("statement: "+st.asTriple().toString());
-				set.add(st);
+			// con qué comparar
+			if (subject != null){
+				if (st.getSubject().equals(subject)){
+					System.out.println("SÍ! Sujetos iguales: "+"origen: "+subject + 
+							" destino: "+st.getSubject().toString());
+					System.out.println("statement: "+st.asTriple().toString());
+					set.add(st);
+				}
+				else{
+					System.out.println("NO! Sujetos distintos: "+"origen: "+subject + " destino: "+
+									st.getSubject().toString());
+					
+				}
 			}
-			else{
-				System.out.println("NO! Sujetos distintos: "+"origen: "+subject + " destino: "+st.getSubject().toString());
-				
+			else if (predicate != null){
+				if (st.getPredicate().equals(predicate)){
+					System.out.println("SÍ! Predicados iguales: "+"origen: "+predicate + 
+							" destino: "+st.getPredicate().toString());
+					System.out.println("statement: "+st.asTriple().toString());
+					set.add(st);
+				}
+				else{
+					System.out.println("NO! predicate distintos: "+"origen: "+predicate + " destino: "+
+									st.getPredicate().toString());
+					
+				}
+			}
+			else if (object != null){
+				if (st.getObject().equals(object)){
+					System.out.println("SÍ! Objetos iguales: "+"origen: "+object + 
+							" destino: "+st.getObject().toString());
+					System.out.println("statement: "+st.asTriple().toString());
+					set.add(st);
+				}
+				else{
+					System.out.println("NO! predicate distintos: "+"origen: "+object + " destino: "+
+									st.getObject().toString());
+					
+				}
 			}
 		}
 		return set;

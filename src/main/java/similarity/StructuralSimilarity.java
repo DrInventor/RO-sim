@@ -102,16 +102,31 @@ public class StructuralSimilarity {
 	}
 	
 	// subset of statements
-	public void isInModel(){}
+	/**
+	 * 
+	 * @param model
+	 * @param st
+	 * @return true if the st is in the @model false in other case
+	 * @throws NullPointerException if the param is null
+	 */
+	public boolean isInModel(Model model, Statement st){
+		if (st == null || model == null) 
+			throw new NullPointerException("Paramenter cannot be null");
+		//FIXME mirar por qué no fuciona model.listStatements(st.getSubject(), st.getPredicate(), st.getObject())
+		StmtIterator iterator = model.listStatements();
+		while(iterator.hasNext()){
+			Statement stIter = iterator.next();
+			logger.debug("Statement recuperado "+stIter.getSubject()+" "+stIter.getPredicate()+" "+stIter.getObject());
+			if (st.getSubject().equals(stIter.getSubject()) && 
+					st.getPredicate().equals(stIter.getPredicate()) && st.getObject().equals(stIter.getObject()))
+				return true;
+		}
+		return false;
+	}
 	
 	
-	// common predicates
+	// TODO common predicates --> hacer si se considera interesante
 	public void predicateIntersection(StmtIterator modelIterator, StmtIterator modelIterator2){
-//		los predicados (propiedades) no son interesantes --> deberían compartirlos casi todos
-		Set<Resource> setPredicates1 = getAllPredicates(modelIterator);
-		Set<Resource> setPredicates2 = getAllPredicates(modelIterator2);
-
-		Set commonPredicates = intersection(setPredicates1, setPredicates2);		
 		
 	}
 	
