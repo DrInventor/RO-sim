@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 
 public class StructuralSimilarityTest {
 
@@ -153,18 +154,14 @@ public class StructuralSimilarityTest {
 	@Test
 	//FIXME mirar bien cómo se crean los resources asociados al modelo porque está fallando
 	public void isInModelTrue(){
-		Model modelData2 = RDFDataMgr.loadModel("src/test/resources/data2.ttl",Lang.TURTLE) ;
-//		Resource r = modelData2.createResource("http://example.org/alice", FOAF.Person)
-//			.addProperty(FOAF.name, "Alice")
-//			.addProperty(FOAF.mbox, modelData2.createResource("mailto:alice@example.org"))
-//			.addProperty(FOAF.knows, modelData2.createResource("http://example.org/bob"));
-	
+		Model modelData2 = RDFDataMgr.loadModel("src/test/resources/data2.ttl",Lang.TURTLE) ;	
+		
 //		[http://example.org/charlie, http://xmlns.com/foaf/0.1/knows, http://example.org/andreas]
 		Resource subject = ResourceFactory.createResource("http://example.org/charlie");
 		Property predicate = ResourceFactory.createProperty("http://xmlns.com/foaf/0.1/knows");
 		Resource object = ResourceFactory.createResource("http://example.org/andreas");		
-		Statement statement = modelData2.createStatement(subject, predicate, object);//.createStatement(subject, predicate, object);
-		
+		Statement statement = modelData2.createStatement(subject, predicate, object);
+		modelData2.add(statement);
 		Assert.assertTrue(similarity.isInModel(modelData2, statement));
 	}
 	

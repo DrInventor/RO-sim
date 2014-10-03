@@ -112,16 +112,17 @@ public class StructuralSimilarity {
 	public boolean isInModel(Model model, Statement st){
 		if (st == null || model == null) 
 			throw new NullPointerException("Paramenter cannot be null");
-		//FIXME mirar por qué no fuciona model.listStatements(st.getSubject(), st.getPredicate(), st.getObject())
-		StmtIterator iterator = model.listStatements();
-		while(iterator.hasNext()){
-			Statement stIter = iterator.next();
-			logger.debug("Statement recuperado "+stIter.getSubject()+" "+stIter.getPredicate()+" "+stIter.getObject());
-			if (st.getSubject().equals(stIter.getSubject()) && 
-					st.getPredicate().equals(stIter.getPredicate()) && st.getObject().equals(stIter.getObject()))
-				return true;
-		}
-		return false;
+		return model.listStatements(st.getSubject(), st.getPredicate(), st.getObject()).hasNext();
+//		 manera fea
+//		StmtIterator iterator = model.listStatements();
+//		while(iterator.hasNext()){
+//			Statement stIter = iterator.next();
+//			logger.debug("Statement recuperado "+stIter.getSubject()+" "+stIter.getPredicate()+" "+stIter.getObject());
+//			if (st.getSubject().equals(stIter.getSubject()) && 
+//					st.getPredicate().equals(stIter.getPredicate()) && st.getObject().equals(stIter.getObject()))
+//				return true;
+//		}
+//		return false;
 	}
 	
 	
