@@ -23,9 +23,11 @@ ore:aggregates <http://mayor2.dia.fi.upm.es/oeg-upm/files/dgarijo/motifAnalysis/
 ore:isDescribedBy <>;
 xhv:license <http://creativecommons.org/licenses/by-nc-sa/2.0/>;
 prov:wasAttributedTo <http://delicias.dia.fi.upm.es/members/DGarijo/#me> .
+
 <> dc:creator <http://delicias.dia.fi.upm.es/members/DGarijo/#me>;
 schema:creator <http://delicias.dia.fi.upm.es/members/DGarijo/#me>;
 prov:wasAttributedTo <http://delicias.dia.fi.upm.es/members/DGarijo/#me> .
+
 <http://mayor2.dia.fi.upm.es/oeg-upm/files/dgarijo/motifAnalysis/ConsolidatedData-FinalSubmission-NEWHierarchy.xlsx> a ro:Resource .
 <http://mayor2.dia.fi.upm.es/oeg-upm/files/dgarijo/motifAnalysis/WfCatalogue-AdditionalGalaxyWfs.xlsx> a ro:Resource .
 <http://mayor2.dia.fi.upm.es/oeg-upm/files/dgarijo/motifAnalysis/WfCatalogue-AdditionalVistrailsWfsWithDomainsRevisited.xlsx> a ro:Resource .

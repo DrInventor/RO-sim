@@ -152,10 +152,8 @@ public class StructuralSimilarityTest {
 		Assert.assertFalse(similarity.isInModel(modelData2, statement));
 	}
 	@Test
-	//FIXME mirar bien cómo se crean los resources asociados al modelo porque está fallando
 	public void isInModelTrue(){
 		Model modelData2 = RDFDataMgr.loadModel("src/test/resources/data2.ttl",Lang.TURTLE) ;	
-		
 //		[http://example.org/charlie, http://xmlns.com/foaf/0.1/knows, http://example.org/andreas]
 		Resource subject = ResourceFactory.createResource("http://example.org/charlie");
 		Property predicate = ResourceFactory.createProperty("http://xmlns.com/foaf/0.1/knows");
