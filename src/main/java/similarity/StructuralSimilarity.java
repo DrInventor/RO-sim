@@ -9,9 +9,13 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import util.SetUtils;
+
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
@@ -22,52 +26,10 @@ public class StructuralSimilarity {
 	// vector de pesos para ponderar cada elemento
 	private Vector<Double> weights;
 
-	// common subjects
-	public double subjectSimilarity(StmtIterator modelIterator, StmtIterator modelIterator2){
-		
-		if (modelIterator == null || modelIterator2== null){
-			logger.error("Parameters cannot be null ");
-			throw new NullPointerException();
-		}
-		Set<Resource> set1 = getAllSubjects(modelIterator);		
-		Set<Resource> set2 = getAllSubjects(modelIterator2);
-		
-		// cast to resource
-		Set<Object> inter = intersection(set1, set2);
-		if (inter.size() > 0){
-			// TODO mejorar esta métrica
-			// unión de los conjuntos / intersección de los conjuntos
-			// normalized
-			double sim = ((set1.size()+set2.size())/inter.size())*0.1;
-			return sim;
-		}
-		else return 0;
-				
-	}
-	
-	// common objects
-	public double objectSimilarity(StmtIterator modelIterator, StmtIterator modelIterator2){
-		
-		if (modelIterator == null || modelIterator2== null){
-			logger.error("Parameters cannot be null ");
-			throw new NullPointerException();
-		}
-		
-		Set<RDFNode> set1 = getAllObjects(modelIterator);		
-		Set<RDFNode> set2 = getAllObjects(modelIterator2);
-		
-		// cast to rdfnode
-		Set<Object> inter = intersection(set1, set2);
-		if (inter.size() > 0){
-			//		unión de los conjuntos / intersección de los conjuntos
-			//TODO mejorar esta métrica
-			double sim = ((set1.size()+set2.size())/inter.size())*0.1;
-			return sim;		
-		}
-		else return 0;
-	}
+	private static final String ore_aggregates = "http://www.openarchives.org/ore/terms/aggregates";
+
 	// statements compartidos por dos modelos
-	public Set<Statement> commonStatements(List<Statement> modelIterator, List<Statement> modelIterator2){
+	public Set<Statement> sharedStatements(List<Statement> modelIterator, List<Statement> modelIterator2){
 		List<Statement> list= new ArrayList<Statement>();
 		for (Statement st: modelIterator )
 			list.add(st);
@@ -91,11 +53,11 @@ public class StructuralSimilarity {
 	
 	// statement similarity
 	public double statementSimilarity(List<Statement> modelIterator, List<Statement> modelIterator2){
-		int size = modelIterator.size() ;		
-		int size2 = modelIterator2.size() ;		
-		Set<Statement> set = commonStatements(modelIterator, modelIterator2);
+		double size = modelIterator.size() ;		
+		double size2 = modelIterator2.size() ;		
+		Set<Statement> set = sharedStatements(modelIterator, modelIterator2);
 		if (set.size() > 0){
-			double sim = ((size+size2)/set.size())*0.1;
+			double sim = (set.size()/(size+size2));
 			return sim;
 		}
 		return 0;
@@ -110,19 +72,10 @@ public class StructuralSimilarity {
 	 * @throws NullPointerException if the param is null
 	 */
 	public boolean isInModel(Model model, Statement st){
+		
 		if (st == null || model == null) 
-			throw new NullPointerException("Paramenter cannot be null");
+			throw new NullPointerException("Paramenter cannot be null");		
 		return model.listStatements(st.getSubject(), st.getPredicate(), st.getObject()).hasNext();
-//		 manera fea
-//		StmtIterator iterator = model.listStatements();
-//		while(iterator.hasNext()){
-//			Statement stIter = iterator.next();
-//			logger.debug("Statement recuperado "+stIter.getSubject()+" "+stIter.getPredicate()+" "+stIter.getObject());
-//			if (st.getSubject().equals(stIter.getSubject()) && 
-//					st.getPredicate().equals(stIter.getPredicate()) && st.getObject().equals(stIter.getObject()))
-//				return true;
-//		}
-//		return false;
 	}
 	
 	
@@ -131,28 +84,80 @@ public class StructuralSimilarity {
 		
 	}
 	
-	
-	// common prefix
-	public void prefixIntersection(){
-		
+	// TODO compare the number of aggregations (ro:aggregatedAnnotation)
+	public boolean hasAgreggatedResources(Model model){
+		if (model == null){
+			logger.error("Parameter cannot be null");
+			throw  new NullPointerException("Parameter cannot be null");
+		}
+		Property p = ResourceFactory.createProperty(ore_aggregates);
+		return model.contains(null, p);		
 	}
 	
-
+	public int numberOfAggregatedResources(Model model){
+		if (model == null){
+			logger.error("Parameter cannot be null");
+			throw new NullPointerException("Parameter cannot be null");
+		}
+		if (hasAgreggatedResources(model)){
+			logger.debug("the model has: "+ore_aggregates);
+			Property p = ResourceFactory.createProperty(ore_aggregates);
+			List<RDFNode> list =	model.listObjectsOfProperty(p).toList();
+			logger.debug("list of. "+list.toString());
+			logger.debug("size: "+list.size());
+			return list.size();
+		}
+		logger.debug("The model hasn't :"+ ore_aggregates);
+		return -1;
+	}
+	
+//	number of common aggregated resources
+	public Set<Object> sharedAggregatedResources(Model model1, Model model2){
+		if (model1 == null || model2 == null){
+			logger.error("Parameter cannot be null");
+			throw new NullPointerException("Parameter cannot be null");	
+		}
+		if (hasAgreggatedResources(model1) & hasAgreggatedResources(model2)){
+			Property p = ResourceFactory.createProperty(ore_aggregates);
+			// FIXME ¿se puede mejorar con model.difference() ?? -> de momento funciona
+			// model.containAny() -> no funciona porque compara statements
+			Set<Object> set = SetUtils.intersection(model1.listObjectsOfProperty(p).toSet(), model2.listObjectsOfProperty(p).toSet());
+			logger.debug("Conjunto intersección: "+set.toString());
+			return set;
+		}
+		logger.debug("There aren't ore:aggregates in both model");
+		return null;
+	}
+	
+	
+	// FIXME : separar claramente la parte estructural de la parte extensional
 	public double computeStructuralSimilarity(Model model, Model model2){
-		StmtIterator iter = model.listStatements();
-		StmtIterator iter2 = model2.listStatements();
-		double subjects = subjectSimilarity(iter, iter2);
-		logger.debug("Subject similarity: "+subjects);
-		iter = model.listStatements();
-		iter2 = model2.listStatements();
-		double objects = objectSimilarity(iter, iter2);
-		logger.debug("Object similarity: "+objects);
-		List<Statement> list= stmt2List(model.listStatements());
-		List<Statement> list2 = stmt2List(model2.listStatements());
+//		StmtIterator iter = model.listStatements();
+//		StmtIterator iter2 = model2.listStatements();
+//		double subjects = subjectSimilarity(iter, iter2);
+//		logger.debug("Subject similarity: "+subjects);
+//		iter = model.listStatements();
+//		iter2 = model2.listStatements();
+//		double objects = objectSimilarity(iter, iter2);
+//		logger.debug("Object similarity: "+objects);
 		
+		List<Statement> list= stmt2List(model.listStatements());
+		List<Statement> list2 = stmt2List(model2.listStatements());		
 		double statements = statementSimilarity(list, list2);		
 		logger.debug("Statement similarity: "+statements);
-		return 0.50*statements + 0.30*subjects + 0.20*objects;
+		
+		int model1SizeProperty = numberOfAggregatedResources(model);
+		int model2SizeProperty = numberOfAggregatedResources(model2);
+		// FIXME : cambiar la métrica de similitud para el mismo conjunto si sumamos el tamaño la similitud siempre es 2
+		// @see http://en.wikipedia.org/wiki/Jaccard_index
+		// la similitud máxima con jaccard index es 0.5
+		double union, intersection;
+		union = (model1SizeProperty+model2SizeProperty);
+		intersection = sharedAggregatedResources(model, model2).size();
+		double aggregatedSimilarity =  (intersection / union) ;
+		double alpha = 0.50;
+		
+		return 0.50*statements + (1-alpha)*aggregatedSimilarity;
 	}
 	
 	protected List<Statement> stmt2List(StmtIterator listStatements) {
@@ -184,45 +189,5 @@ public class StructuralSimilarity {
 		}		
 		return set;
 	}
-	
-	private Set<Resource> getAllSubjects(StmtIterator modelIterator){
-		Set<Resource> set = new HashSet<Resource>();
-		while (modelIterator.hasNext()){
-			Statement stmt = modelIterator.next();
-			set.add(stmt.getSubject());
-		}
-		return set;
-	}
-	
-	private Set<RDFNode> getAllObjects(StmtIterator modelIterator){
-		Set<RDFNode> set = new HashSet<RDFNode>();
-		while (modelIterator.hasNext()){
-			Statement stmt = modelIterator.next();
-			set.add(stmt.getObject());
-		}
-		return set;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private Set<Object> intersection(Set set1, Set set2){
-		Set<Object> a;
-		Set<Object> b,common = new HashSet<Object>();
-		
-		if (set1.size() <= set2.size()) {
-            a = set1;
-            b = set2;           
-        } else {
-            a = set2;
-            b = set1;
-        }
-        int count = 0;
-        for (Object e : a) {
-            if (b.contains(e)) {
-            	common.add(e);
-                count++;
-            }           
-        }
-        logger.debug("Total number of common: "+ count);
-        return common;
-	}
+
 }
