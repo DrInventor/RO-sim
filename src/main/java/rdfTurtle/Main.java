@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+@Deprecated
 public class Main {
 
 	public static void main(String args[]){
