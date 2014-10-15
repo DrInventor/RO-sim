@@ -15,11 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 public class StructuralSimilarityTest {
 
@@ -30,18 +30,34 @@ public class StructuralSimilarityTest {
 	// -- STATEMENTS COMPARTIDOS
 	
 	@Test
-	public void commonStatements(){
+	public void statementSimilarityDifferentsModels(){
 		// Create a model and read into it from file 
 		// "data.ttl" assumed to be Turtle.
 		Model model = RDFDataMgr.loadModel("src/test/resources/data.ttl",Lang.TURTLE) ;
-		StmtIterator iter = model.listStatements();
-		
 		Model modelData2 = RDFDataMgr.loadModel("src/test/resources/data2.ttl",Lang.TURTLE) ;
-		StmtIterator iter2 = modelData2.listStatements();		
-		
-		Set<Statement> set = similarity.sharedStatements(similarity.stmt2List(iter), similarity.stmt2List(iter2));
-		logger.info("Set: "+set.toString());		
+		double sim = similarity.statementSimilarity(model, modelData2); 
+		assertTrue(sim > 0);		
+		assertTrue(sim < 1);		
 	}
+	
+	@Test
+	public void statementSimilaritySameModels(){
+		// Create a model and read into it from file 
+		// "data.ttl" assumed to be Turtle.
+		Model model = RDFDataMgr.loadModel("src/test/resources/data.ttl",Lang.TURTLE) ;
+		double sim = similarity.statementSimilarity(model, model); 
+		assertTrue(sim > 0);		
+		assertTrue(sim == 1);		
+	}
+	
+	@Test
+	public void computeStatementSimilarityEmptyModels(){
+		Model model1 = ModelFactory.createDefaultModel();
+		double sim = similarity.statementSimilarity(model1, model1);
+		// definition of jaccard index
+		assertTrue (sim == 1);
+	}
+	// is in model
 	
 	@Test(expected = NullPointerException.class)
 	public void isInModelNullStatement(){
@@ -78,26 +94,8 @@ public class StructuralSimilarityTest {
 		Assert.assertTrue(similarity.isInModel(modelData2, statement));
 	}
 	
-	// -- COMPLETE TEST SIMILARITY
-	@Test
-	public void computeSimilarityTotal(){
-		// Create a model and read into it from file 
-		// "data.ttl" assumed to be Turtle.
-		Model model = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;
-		Model modelData2 = RDFDataMgr.loadModel("src/test/resources/ro-folders.ttl",Lang.TURTLE) ;		
-		double sim = similarity.computeStructuralSimilarity(model, modelData2);
-		System.out.println("Sim total: "+sim);		
-	}
-
-	@Test
-	public void computeSimilarityTotalSameModel(){
-		// Create a model and read into it from file 
-		// "data.ttl" assumed to be Turtle.
-		Model model = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;				
-		double sim = similarity.computeStructuralSimilarity(model, model);
-		System.out.println("Sim total: "+sim);		
-	}
 	
+		
 //	-- ore:aggregates test
 	@Test
 	public void hasAgreggatedResources(){
@@ -128,11 +126,7 @@ public class StructuralSimilarityTest {
 		assertTrue(similarity.numberOfAggregatedResources(model) > 0);
 	}
 	
-	@Test
-	public void numberAgreggatesPositiveNumber(){
-		
-	}
-	
+	// sets of aggregates resources	
 	@Test
 	public void sharedAgreggatesResourcesFalse(){
 		Model model1 = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;
@@ -158,6 +152,7 @@ public class StructuralSimilarityTest {
 		assertTrue(set.size() == 1);
 	}
 	
+	// union of aggregated resources 
 	@Test
 	public void sizeOfDifferenceModelSameModel(){
 		Model model1 = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;
@@ -173,4 +168,35 @@ public class StructuralSimilarityTest {
 		assertTrue(similarity.unionOfAgreggatedResources(model1, model2) > 0);		
 		assertTrue(similarity.unionOfAgreggatedResources(model1, model2) == 19);		
 	}
+	
+	
+	
+	// -- COMPLETE TEST SIMILARITY
+		@Test
+		public void computeSimilarityTotal(){
+			// Create a model and read into it from file 
+			// "data.ttl" assumed to be Turtle.
+			Model model = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;
+			Model modelData2 = RDFDataMgr.loadModel("src/test/resources/ro-folders.ttl",Lang.TURTLE) ;		
+			double sim = similarity.computeStructuralSimilarity(model, modelData2);
+			System.out.println("Sim total: "+sim);	
+			assertTrue(sim > 0);		
+			assertTrue(sim < 1);
+		}
+
+		@Test
+		public void computeSimilarityTotalSameModel(){
+			// Create a model and read into it from file 
+			// "data.ttl" assumed to be Turtle.
+			Model model = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;				
+			double sim = similarity.computeStructuralSimilarity(model, model);
+			System.out.println("Sim total: "+sim);
+			assertTrue(sim > 0);		
+			assertTrue(sim == 1);
+		}
+		
+		@Test (expected  = NullPointerException.class)
+		public void computeSimilarityTotalNullModel(){
+			similarity.computeStructuralSimilarity(null, null);		
+		}
 }

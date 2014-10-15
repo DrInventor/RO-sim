@@ -29,6 +29,7 @@ public class StructuralSimilarity {
 	private static final String ore_aggregates = "http://www.openarchives.org/ore/terms/aggregates";
 
 	// statements compartidos por dos modelos
+	@Deprecated
 	public Set<Statement> sharedStatements(List<Statement> modelIterator, List<Statement> modelIterator2){
 		List<Statement> list= new ArrayList<Statement>();
 		for (Statement st: modelIterator )
@@ -51,8 +52,8 @@ public class StructuralSimilarity {
 		return set;
 	}
 	
-	// statement similarity
-	// FIXME : igual que en el caso anterior la union no es la suma de todos sino todos-comunes (porque se suman doble)
+	// statement similarity 
+	@Deprecated // inefficient way
 	public double statementSimilarity(List<Statement> modelIterator, List<Statement> modelIterator2){
 		double size = modelIterator.size() ;		
 		double size2 = modelIterator2.size() ;		
@@ -62,6 +63,21 @@ public class StructuralSimilarity {
 			return sim;
 		}
 		return 0;
+	}
+	
+	public double statementSimilarity(Model model1, Model model2){
+		if (model1 == null || model2 == null){
+			return 0;
+		}
+		if (model1.size() == 0 & model2.size() == 0)
+			// definition of Jaccard index
+			return 1;
+		double intersection = model1.intersection(model2).size();
+		// union = |a| + |b| - |comunes|
+		double union = model1.difference(model2).size() + model2.difference(model1).size() + model1.intersection(model2).size();
+		// @see http://en.wikipedia.org/wiki/Jaccard_index
+		double jaccard = intersection / union ;
+		return jaccard;		
 	}
 	
 	// subset of statements
@@ -85,7 +101,6 @@ public class StructuralSimilarity {
 		
 	}
 	
-	// TODO compare the number of aggregations (ro:aggregatedAnnotation)
 	public boolean hasAgreggatedResources(Model model){
 		if (model == null){
 			logger.error("Parameter cannot be null");
@@ -136,25 +151,38 @@ public class StructuralSimilarity {
 		return null;
 	}
 	
-	// FIXME : la unión de dos conjuntos no es la suma, es la suma de los comunes y no comunes
-	public double computeStructuralSimilarity(Model model, Model model2){
-		
-		List<Statement> list= stmt2List(model.listStatements());
-		List<Statement> list2 = stmt2List(model2.listStatements());		
-		double statements = statementSimilarity(list, list2);		
+	public double computeStructuralSimilarity(Model model, Model model2) throws NullPointerException{
+		if (model == null || model2 == null){
+			logger.error("Parameters cannot be null");
+			throw new NullPointerException("The models cannot be null");
+		}
+		double statements = statementSimilarity(model, model2);		
 		logger.debug("Statement similarity: "+statements);
+		
+		double aggregatedSimilarity = aggregatedResourcesObjectsSimilarity(
+				model, model2);
+		logger.debug("Agreggated resources objects similarity: "+aggregatedSimilarity);
+		// weighted metric for compute similarity 
+		double alpha = 0.50;		
+		return 0.50*statements + (1-alpha)*aggregatedSimilarity;
+	}
+
+	// TODO hacer test de este método
+	public double aggregatedResourcesObjectsSimilarity(Model model, Model model2) {
+		if (model == null || model2 == null){
+			logger.error("Parameters cannot be null");
+			return 0;
+		}
 		// @see http://en.wikipedia.org/wiki/Jaccard_index
 		double union, intersection;
 		union = unionOfAgreggatedResources(model,model2);
 		intersection = sharedAggregatedResources(model, model2).size();
 		double aggregatedSimilarity =  (intersection / union) ;
-		double alpha = 0.50;
-		
-		return 0.50*statements + (1-alpha)*aggregatedSimilarity;
+		return aggregatedSimilarity;
 	}
 	
 	// queremos la union de los ore:aggregates 
-	public double unionOfAgreggatedResources(Model model, Model model2) {
+	public double unionOfAgreggatedResources(Model model, Model model2) throws NullPointerException{
 		if (model == null || model2 == null){
 			logger.error("Parameter cannot be null");
 			throw new NullPointerException("Parameter cannot be null");
@@ -197,13 +225,5 @@ public class StructuralSimilarity {
 		this.weights.add(weight);
 	}
 	
-	private Set<Resource> getAllPredicates(StmtIterator modelIterator){
-		Set<Resource> set = new HashSet<Resource>();
-		while (modelIterator.hasNext()){
-			Statement stmt = modelIterator.next();		
-			set.add(stmt.getPredicate());
-		}		
-		return set;
-	}
-
+	
 }
