@@ -52,6 +52,7 @@ public class StructuralSimilarity {
 	}
 	
 	// statement similarity
+	// FIXME : igual que en el caso anterior la union no es la suma de todos sino todos-comunes (porque se suman doble)
 	public double statementSimilarity(List<Statement> modelIterator, List<Statement> modelIterator2){
 		double size = modelIterator.size() ;		
 		double size2 = modelIterator2.size() ;		
@@ -112,6 +113,12 @@ public class StructuralSimilarity {
 	}
 	
 //	number of common aggregated resources
+	/**
+	 * 
+	 * @param model1
+	 * @param model2
+	 * @return a set with the shared objects that are shared by the two models
+	 */
 	public Set<Object> sharedAggregatedResources(Model model1, Model model2){
 		if (model1 == null || model2 == null){
 			logger.error("Parameter cannot be null");
@@ -129,30 +136,16 @@ public class StructuralSimilarity {
 		return null;
 	}
 	
-	
-	// FIXME : separar claramente la parte estructural de la parte extensional
+	// FIXME : la unión de dos conjuntos no es la suma, es la suma de los comunes y no comunes
 	public double computeStructuralSimilarity(Model model, Model model2){
-//		StmtIterator iter = model.listStatements();
-//		StmtIterator iter2 = model2.listStatements();
-//		double subjects = subjectSimilarity(iter, iter2);
-//		logger.debug("Subject similarity: "+subjects);
-//		iter = model.listStatements();
-//		iter2 = model2.listStatements();
-//		double objects = objectSimilarity(iter, iter2);
-//		logger.debug("Object similarity: "+objects);
 		
 		List<Statement> list= stmt2List(model.listStatements());
 		List<Statement> list2 = stmt2List(model2.listStatements());		
 		double statements = statementSimilarity(list, list2);		
 		logger.debug("Statement similarity: "+statements);
-		
-		int model1SizeProperty = numberOfAggregatedResources(model);
-		int model2SizeProperty = numberOfAggregatedResources(model2);
-		// FIXME : cambiar la métrica de similitud para el mismo conjunto si sumamos el tamaño la similitud siempre es 2
 		// @see http://en.wikipedia.org/wiki/Jaccard_index
-		// la similitud máxima con jaccard index es 0.5
 		double union, intersection;
-		union = (model1SizeProperty+model2SizeProperty);
+		union = unionOfAgreggatedResources(model,model2);
 		intersection = sharedAggregatedResources(model, model2).size();
 		double aggregatedSimilarity =  (intersection / union) ;
 		double alpha = 0.50;
@@ -160,8 +153,31 @@ public class StructuralSimilarity {
 		return 0.50*statements + (1-alpha)*aggregatedSimilarity;
 	}
 	
+	// queremos la union de los ore:aggregates 
+	public double unionOfAgreggatedResources(Model model, Model model2) {
+		if (model == null || model2 == null){
+			logger.error("Parameter cannot be null");
+			throw new NullPointerException("Parameter cannot be null");
+		}
+		if (hasAgreggatedResources(model) & hasAgreggatedResources(model2)){
+			logger.debug("the model has: "+ore_aggregates);
+			Property p = ResourceFactory.createProperty(ore_aggregates);
+			List<RDFNode> list =	model.listObjectsOfProperty(p).toList();
+			List<RDFNode> list2 =	model2.listObjectsOfProperty(p).toList();			
+			logger.debug("list of. "+list.toString());
+			logger.debug("list of. "+list2.toString());
+			logger.debug("size: "+list.size());
+			logger.debug("size: "+list2.size());
+			// union A u B = |A| + |B| - |A ^ B|
+			double union = list.size() + list2.size();
+			list.retainAll(list2);			
+			return (union - list.size());
+		}
+		logger.debug("The model hasn't :"+ ore_aggregates);
+		return 0;		
+	}
+
 	protected List<Statement> stmt2List(StmtIterator listStatements) {
-		// 
 		List<Statement> list = new ArrayList<Statement>();
 		while (listStatements.hasNext()){
 			list.add(listStatements.next());

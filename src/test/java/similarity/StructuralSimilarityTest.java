@@ -158,4 +158,19 @@ public class StructuralSimilarityTest {
 		assertTrue(set.size() == 1);
 	}
 	
+	@Test
+	public void sizeOfDifferenceModelSameModel(){
+		Model model1 = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;
+		double size = 9;
+		assertTrue(similarity.unionOfAgreggatedResources(model1, model1) == size);
+	}
+	
+	@Test
+	public void sizeOfDifferenceModelDifferentModelOnly1Shared(){
+		Model model1 = RDFDataMgr.loadModel("src/test/resources/ro-sample.ttl",Lang.TURTLE) ;
+		Model model2 = RDFDataMgr.loadModel("src/test/resources/ro-folders.ttl",Lang.TURTLE) ;
+
+		assertTrue(similarity.unionOfAgreggatedResources(model1, model2) > 0);		
+		assertTrue(similarity.unionOfAgreggatedResources(model1, model2) == 19);		
+	}
 }
