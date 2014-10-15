@@ -1,15 +1,13 @@
 package similarity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /*
  * comparing the sets of individuals. 
@@ -21,91 +19,61 @@ public class ExtensionalSimilarity {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	// common objects
-	public double objectSimilarity(StmtIterator modelIterator, StmtIterator modelIterator2){
 
-		if (modelIterator == null || modelIterator2== null){
-			logger.error("Parameters cannot be null ");
-			throw new NullPointerException();
+	// FIXME : refactorizar jaccard index y sacar método común
+	public double objectSimilarity(Model model1, Model model2) throws NullPointerException{
+		if (model1 == null || model2 == null){
+			logger.error("The models cannot be null");
+			throw new NullPointerException("The models cannot be null");
 		}
 
-		Set<RDFNode> set1 = getAllObjects(modelIterator);		
-		Set<RDFNode> set2 = getAllObjects(modelIterator2);
+		if (model1 == null || model2 == null){
+			return 0;
+		}
 
-		// cast to rdfnode
-		Set<Object> inter = intersection(set1, set2);
-		if (inter.size() > 0){
-			//		unión de los conjuntos / intersección de los conjuntos
-			//TODO ¿cómo conseguir mejores valores?
-			double sim = ((set1.size()+set2.size())/inter.size())*0.1;
-			return sim;		
-		}
-		else return 0;
-	}
+		// jaccard index -> http://en.wikipedia.org/wiki/Jaccard_index
+		List<RDFNode> list = model1.listObjects().toList();
+		List<RDFNode> list2 = model2.listObjects().toList();
 
-	// common subjects
-		public double subjectSimilarity(StmtIterator modelIterator, StmtIterator modelIterator2){
-			
-			if (modelIterator == null || modelIterator2== null){
-				logger.error("Parameters cannot be null ");
-				throw new NullPointerException();
-			}
-			Set<Resource> set1 = getAllSubjects(modelIterator);		
-			Set<Resource> set2 = getAllSubjects(modelIterator2);
-			
-			// cast to resource
-			Set<Object> inter = intersection(set1, set2);
-			if (inter.size() > 0){
-				// TODO ¿cómo conseguir mejores valores?
-				// unión de los conjuntos / intersección de los conjuntos
-				// normalized
-				double sim = ((set1.size()+set2.size())/inter.size())*0.1;
-				return sim;
-			}
-			else return 0;
-					
-		}
-		
-	private Set<RDFNode> getAllObjects(StmtIterator modelIterator){
-		Set<RDFNode> set = new HashSet<RDFNode>();
-		while (modelIterator.hasNext()){
-			Statement stmt = modelIterator.next();
-			set.add(stmt.getObject());
-		}
-		return set;
+
+		if (list.size() == 0 & list2.size() == 0)
+			// definition of Jaccard index
+			return 1;
+
+		double intersection;
+		// union = |a| + |b| - |comunes|
+		double union = list.size() + list2.size();
+		list.retainAll(list2);
+		intersection = list.size();
+		// @see http://en.wikipedia.org/wiki/Jaccard_index
+		double jaccard = intersection / (union-intersection) ;
+		return jaccard;	
 	}
 	
-	@SuppressWarnings("unchecked")
-	private Set<Object> intersection(Set set1, Set set2){
-		Set<Object> a;
-		Set<Object> b,common = new HashSet<Object>();
-		
-		if (set1.size() <= set2.size()) {
-            a = set1;
-            b = set2;           
-        } else {
-            a = set2;
-            b = set1;
-        }
-        int count = 0;
-        for (Object e : a) {
-            if (b.contains(e)) {
-            	common.add(e);
-                count++;
-            }           
-        }
-        logger.debug("Total number of common: "+ count);
-        return common;
-	}
 	
-	private Set<Resource> getAllSubjects(StmtIterator modelIterator){
-		// TODO : refactorizar para model.listStatements(null,null, null);
-		Set<Resource> set = new HashSet<Resource>();
-		while (modelIterator.hasNext()){
-			Statement stmt = modelIterator.next();
-			set.add(stmt.getSubject());
+	public double subjectSimilarity(Model model1, Model model2) throws NullPointerException{
+		if (model1 == null || model2 == null){
+			logger.error("The models cannot be null");
+			throw new NullPointerException("The models cannot be null");
 		}
-		return set;
+		
+		// jaccard index -> http://en.wikipedia.org/wiki/Jaccard_index
+		List<Resource> list = model1.listSubjects().toList();
+		List<Resource> list2 = model2.listSubjects().toList();
+			
+		if (list.size() == 0 & list2.size() == 0)
+			// definition of Jaccard index
+			return 1;
+		
+		double intersection;
+		// union = |a| + |b| - |comunes|
+		double union = list.size() + list2.size();
+		list.retainAll(list2);
+		intersection = list.size();
+		// @see http://en.wikipedia.org/wiki/Jaccard_index
+		double jaccard = intersection / (union-intersection) ;
+		return jaccard;	
+		
 	}
 
 }
