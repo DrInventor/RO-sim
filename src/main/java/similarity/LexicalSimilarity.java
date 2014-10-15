@@ -1,6 +1,5 @@
 package similarity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,34 +8,20 @@ import org.slf4j.LoggerFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.ResIterator;
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+/*
+ * employ the dc:creator information to produce relations among other authors
+ */
 public class LexicalSimilarity {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final Property dCTermsProperty = DCTerms.creator;
 	
 	// retrieve all the statements with dc:creator property
-	public List<RDFNode> getDCCreators(Model m){
-		if (m == null) throw new NullPointerException("Parameter cannot be null");
-		
-		ResIterator resources = m.listResourcesWithProperty(dCTermsProperty);
-		if (!resources.hasNext()){
-			logger.info("Not found property "+dCTermsProperty.toString());
-			return null;
-		}
-		List<RDFNode> list = new ArrayList<RDFNode>();
-		while(resources.hasNext()){
-			Resource r = resources.next();			
-			logger.info(r.getURI());
-			// now we get the object
-			RDFNode object = r.getProperty(dCTermsProperty).getObject();
-			logger.info(object.toString());
-			list.add(object);
-		}
-		return list;
+	public List<RDFNode> getDCCreators(Model m) throws NullPointerException{
+		if (m == null) throw new NullPointerException("Parameter cannot be null");		
+		return m.listObjectsOfProperty(dCTermsProperty).toList();		
 	}
 	
 	// compare two sets of dc:creator
@@ -53,8 +38,29 @@ public class LexicalSimilarity {
 	
 	
 	// dc:creator ; dc:author ;
-	public void authorSimilarity(){
+	public double authorSimilarity(Model m1, Model m2){
+		if (m1 == null || m2 == null){
+			return 0;
+		}
+		if (!sharesCreators(m1,m2))
+			return 0;
 		
+		List<RDFNode> list1 = getDCCreators(m1);
+		List<RDFNode> list2 = getDCCreators(m2);
+		logger.info("creators of model1: "+list1.toString());
+		logger.info("creators of model2: "+list2.toString());
+		if (list1.size() == 0 & list2.size() == 0)
+			// definition of Jaccard index
+			return 1;
+		double intersection;
+		// union = |a| + |b| - |comunes|
+		double union = list1.size() + list2.size();
+		list1.retainAll(list2);
+		intersection = list1.size();
+		// @see http://en.wikipedia.org/wiki/Jaccard_index
+		double jaccard = intersection / (union-intersection) ;
+		logger.info("Jaccard index: similarity value: "+jaccard);
+		return jaccard;		
 	}
 	
 	
