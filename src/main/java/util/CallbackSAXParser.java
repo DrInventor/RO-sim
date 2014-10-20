@@ -1,10 +1,8 @@
 package util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,11 +16,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.tdb.base.file.FileFactory;
-import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.VCARD;
 
 
 public class CallbackSAXParser extends DefaultHandler {
@@ -36,7 +31,6 @@ public class CallbackSAXParser extends DefaultHandler {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	
-	Model model;
 	
 	private abstract class Receiver {		
 		
@@ -73,18 +67,21 @@ public class CallbackSAXParser extends DefaultHandler {
 		}
 	
 		public Receiver processData(String name, Attributes attrs) {			
-			// creamos la lista de usuarios
+			// create an empty Model
+			model = ModelFactory.createDefaultModel();
+
 			// TODO cogemos el nombre del documento
 			logger.info("Empezamos a procesar el documento");
+			
 			logger.info(this.toString()+" name: "+name+" attributes: "+attrs.toString());
 			for (int i = 0; i< attrs.getLength(); i++){
 				logger.info("Atributo: "+attrs.getValue(i));
 			}
-//			model = ModelFactory.createDefaultModel();
-//			Resource s;
-//			Property p;
-//			RDFNode o;
-//			model.add(s, p, o);
+			String nameFile = attrs.getValue("name");
+			logger.info("Nombre del documento: "+nameFile);
+			Resource fileResource = model.createResource(nameFile);
+			fileResource.addProperty(VCARD.FN, "");
+			model.write(System.out);
 			return new ArticleReceiver();
 		}		
 	}	
@@ -106,59 +103,8 @@ public class CallbackSAXParser extends DefaultHandler {
 			parserStack.push(new SDOReceiver());
 		}
 		
-	}
-	
-//	private class UserReceiver extends Receiver{
-//
-//		
-//		public void finishProcessData(String name) {
-//			// ya tenemos al usuario con su perfil entero generado
-//			// lo añadimos a la lista de usuarios
-//			listaUsuarios.add(user);
-//		}
-//		
-//		public Receiver processData(String name, Attributes attrs) {
-//			// estamos procesando un nuevo usuario
-//			user = new TransferUser();
-//			user.setId(attrs.getValue(0));			
-//	
-//			return new LessonReceiver();
-//		}		
-//	}
-	
-//	private class LessonReceiver extends Receiver{		
-//		
-//		public void finishProcessData(String name) {
-//			
-//		}
-//
-//		public Receiver processData(String name, Attributes attrs) {			
-//			// tengo que coger el nombre de la lección para añadirlo al perfil
-//			String lessonName = attrs.getValue(0);			
-//			lesson = new Lesson();
-//			lesson.setLesson(lessonName);
-//			user.addLesson(lesson);
-//			// devolvemos un puntero a lo siguiente que vendrá que es un concepto
-//			return new ConceptReceiver();
-//		}		
-//	}
-	
-//	private class ConceptReceiver extends Receiver{
-//
-//		void finishProcessData(String name) {			
-//			
-//		}
-//
-//		Receiver processData(String name, Attributes attrs) {
-//			String nombreConcepto = attrs.getValue(0);
-//			lesson.addConcepto(nombreConcepto);
-//			String nota = attrs.getValue(1);
-//			if (nota.isEmpty()) 
-//				nota = "-1.0";			
-//			lesson.addNota(nota);
-//			return null;
-//		}		
-//	}
+	}	
+
 	
 	/**
 	* Atributos
@@ -166,16 +112,8 @@ public class CallbackSAXParser extends DefaultHandler {
 	private javax.xml.parsers.SAXParser saxParser;
 	private String xmlFilename;	
 	private Stack<Receiver> parserStack;
-	
-	//atributo para guardar a todos los usuarios del sistema
-//	private ArrayList<TransferUser> listaUsuarios;
-	
-	//atributo para guardar un usuario
-//	private TransferUser user;
-	//atributo para guardar una lección con conceptos
-//	private Lesson lesson;
-	
-	
+	private Model model;
+
 	public CallbackSAXParser() {
 		  parserStack = new Stack<Receiver>();
 	}
@@ -185,7 +123,6 @@ public class CallbackSAXParser extends DefaultHandler {
 		Receiver candidate = parserStack.peek();
 		Receiver followUp = null;	
 		
-		// FIXME cuando article acaba la pila se lia!! hay que hacer un receiver común para todo lo que hay dentro de document!!!
 		if (name.equals(title))
 			followUp = ((ArticleReceiver)candidate).processData(name, attrs);
 		else if (name.equals(DRI_Approach) || name.equals(DRI_Background) || name.equals(DRI_Challenge) ||
@@ -258,9 +195,6 @@ public class CallbackSAXParser extends DefaultHandler {
 		// Si hay que hacer algo al finalizar
 	}
 	
-//	public ArrayList<TransferUser> getListaUsuarios(){
-//		return listaUsuarios;
-//	}
 	
 	// EJEMPLO DE USO
 	public static void main(String[] args) {
@@ -283,6 +217,6 @@ public class CallbackSAXParser extends DefaultHandler {
 	private final String DRI_Challenge_Hypothesis ="DRI_Challenge_Hypothesis";
 	private final String Sentence ="Sentence";
 	private final String title = "article-title";
-	private final String document ="Document";
+//	private final String document ="Document";
 
 }
