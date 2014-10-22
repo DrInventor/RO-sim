@@ -8,7 +8,9 @@
   <article>
     <front class="DoCO:FrontMatter">
       <title-group>
-        <article-title class="DoCO:Title" id="2"><s id="1" sid="1">A Data-driven Approach for Real-Time Clothes Simulation</s></article-title>
+        <article-title class="DoCO:Title" id="2">
+        	<s id="1" sid="1">A Data-driven Approach for Real-Time Clothes Simulation</s>
+        </article-title>
       </title-group>
       <contrib-group class="DoCO:ListOfAuthors">
         <contrib contrib-type="author">

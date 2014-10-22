@@ -20,7 +20,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
-import com.hp.hpl.jena.vocabulary.VCARD;
 
 
 public class CallbackSAXParser extends DefaultHandler {
@@ -117,6 +116,7 @@ public class CallbackSAXParser extends DefaultHandler {
 			}
 			String nameFile = attrs.getValue("name");
 			logger.info("Nombre del documento: "+nameFile);
+			fileName = attrs.getValue("name")+".ttl";
 
 			// create an empty Model
 			model = ModelFactory.createDefaultModel();
@@ -135,8 +135,6 @@ public class CallbackSAXParser extends DefaultHandler {
 			fileResource.addProperty(a, biboArticle);
 			fileResource.addProperty(a, sdoDiscourse);	
 
-
-			//			model.write(System.out,"RDF/XML-ABBREV");
 			model.write(System.out, "TURTLE");
 
 			return new ArticleReceiver();
@@ -150,7 +148,7 @@ public class CallbackSAXParser extends DefaultHandler {
 		Receiver processData(String name, Attributes attrs) {
 			// al comienzo no es necesario hacer nada
 			logger.info("Estamos en article receiver");
-			logger.info(this.toString()+" name: "+name+" attributes: "+attrs.toString());			
+			logger.info(this.toString()+" name: "+name+" attributes: "+attrs.toString());	
 			return null;
 		}
 
@@ -273,12 +271,11 @@ public class CallbackSAXParser extends DefaultHandler {
 		try {
 		   // OR Turtle format - compact and more readable
 		  // use this variant if you're not sure which to use!
-		  out = new FileWriter( "mymodel.ttl" );
+		  out = new FileWriter( p.getFileName());
 		  p.model.write( out, "Turtle" );
 			p.logger.debug("total number of sentences: "+p.contador);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			p.logger.error(e.getMessage());
 		}
 		finally {
 		  if (out != null) {
@@ -286,6 +283,14 @@ public class CallbackSAXParser extends DefaultHandler {
 		  }
 		}
 
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	// fields for SDO annotation
@@ -312,5 +317,7 @@ public class CallbackSAXParser extends DefaultHandler {
 	protected Property biboArticle;
 	private String contenido;	
 	private int contador = 0;
+	
+	private String fileName;
 
 }
