@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,9 +38,14 @@ public class XML2RO extends DefaultHandler{
 	
 	public XML2RO() {
 		parserStack = new Stack<Receiver>();
+		createModel();
 	}
 
+	// resultados
 	private String fileName;
+	private String doiPaper;
+	private String titlePaper;
+	private List<String> authors = new ArrayList<String>();
 
 	private final String ore = "http://www.openarchives.org/ore/terms/";
 	private final String prov = "http://www.w3.org/ns/prov#";
@@ -103,29 +110,83 @@ public class XML2RO extends DefaultHandler{
 	
 	public void startElement(String uri, String local, String name, Attributes attrs)  throws SAXException {
 		// el elemento que está en la cima de la pila
+		logger.debug("Entramos en el elemento: "+name);
+		logger.debug("estado de la pila "+parserStack.toString());
 		Receiver candidate = parserStack.peek();
 		Receiver followUp = null;	
 
-		if (name.equals(articleTitle))
-			followUp = ((ArticleTittleReceiver)candidate).processData(name, attrs);
-			
-		else if (name.equals("doi"))
-			followUp = ((DoiReceiver)candidate).processData(name, attrs);
-		else
-			followUp = (candidate).processData(name, attrs);
+//		if (name.equals(articleTitle))
+//			followUp = ((ArticleTittleReceiver)candidate).processData(name, attrs);
+//
+//		else if (name.equals("doi")){
+//			followUp = ((DoiReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals("s")) {
+//
+//			followUp = ((SentenceReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals(XML2RO.name)){
+//
+//			followUp = ((NameReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals(meta)){
+//			
+//			followUp = ((MetaReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals(article)){
+//			
+//			followUp = ((ArticleReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals(front)){
+//			
+//			followUp = ((FrontReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals(titleGroup)){
+//			
+//			followUp = ((TitleGroupReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals(contribGroup)){
+//			
+//			followUp = ((ContribGroupReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals(contrib)){
+//			
+//			followUp = ((ContribReceiver)candidate).processData(name, attrs);
+//		}
+//		else if (name.equals("pdfx")){
+//			followUp = ((StartReceiver)candidate).processData(name, attrs);			
+//		}
 
+		if (name.equals("doi") ||
+				name.equals("s") || name.equals("name") || name.equals(articleTitle) || 
+				name.equals(meta) || name.equals(article) || name.equals(front) || name.equals(titleGroup) ||
+				 name.equals(contribGroup) || name.equals(contrib) || name.equals("pdfx") ){
+			followUp = candidate.processData(name, attrs);			
+		}
 		// el elemento siguiente		
 		if (followUp!=null) {
 			parserStack.push(followUp);
 		}
-		else
-			parserStack.push(candidate);    	
+//		else
+//			parserStack.push(candidate); 
+		logger.debug("estado de la pila "+parserStack.toString());
+
 	}
 
 	public void endElement(String uri, String local, String name) throws SAXException {
-		logger.info("EStamos en end elemento: "+uri+" - "+local+" - "+name);		
-		Receiver top = parserStack.pop();
-		top.finishProcessData(name);
+		// si no he añadido a la pila no hago nada
+		logger.info("EStamos en end elemento: "+uri+" - "+local+" - "+name);
+		if (name.equals("doi") ||
+			name.equals("s") || name.equals("name") || name.equals(articleTitle) || 
+			name.equals(meta) || name.equals(article) || name.equals(front) || name.equals(titleGroup) ||
+			 name.equals(contribGroup) || name.equals(contrib) || name.equals("pdfx") ){
+			
+			Receiver top = parserStack.pop();
+			top.finishProcessData(name);
+			logger.debug("se elimina de la pila. resultado de la pila: "+parserStack.toString());			
+		}
+		
+		
 	} 
 
 	/* 
@@ -174,6 +235,11 @@ public class XML2RO extends DefaultHandler{
 
 	public void end() {
 		// Si hay que hacer algo al finalizar
+		logger.debug("Resultado final de las variables: ");
+		logger.debug("doi del artículo: "+doiPaper);
+		logger.debug("tittle del paper: "+titlePaper);
+		logger.debug("lista de autores: "+authors.toString());
+		
 	}
 
 	private abstract class Receiver {		
@@ -187,12 +253,14 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
+			// ¿ se hace algo con el documento ?
+			logger.debug("Etiqueta :"+name);
 			return new MetaReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			
+			logger.debug("Fin de Etiqueta :"+name);
 		}
 		
 	}
@@ -201,14 +269,15 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
+			logger.debug("Etiqueta :"+name);
 			return new DoiReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// TODO Auto-generated method stub
-			
+			logger.debug("Fin de Etiqueta :"+name);
+			logger.debug("añadimos el article receiver");
+			parserStack.push(new ArticleReceiver());
 		}
 		
 	}
@@ -217,21 +286,22 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
+			logger.debug("procesamos doi");
 			return null;
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// FIXME revisar por qué ahora no lo coge!! get the doi
 			logger.info("doi del artículo: "+contenido);
+			doiPaper = contenido;
 			paper = model.createResource(contenido);
 			paper.addProperty(a, roResearchObject);
 			paper.addProperty(a, oreAggregation);			
 			// si aquí lo hemos usado habría que vaciarlo
 			contenido = new String();
-			// añadimos a la pila un SDO
-			parserStack.push(new ArticleReceiver());
+			// añadimos a la pila un article
+//			parserStack.push(new ArticleReceiver());
+			logger.debug(this.getClass().getCanonicalName()+" estado de la pila "+parserStack.toString());
 		}
 		
 	}
@@ -240,14 +310,13 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
-			return null;
+			logger.debug("Etiqueta :"+name);
+			return new FrontReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// TODO Auto-generated method stub
-			
+			logger.debug("Fin de la Etiqueta :"+name);
 		}
 		
 	}
@@ -256,55 +325,68 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
-			return null;
+			logger.debug("Etiqueta :"+name);
+			return new TitleGroupReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// TODO Auto-generated method stub
-			
+			logger.debug("Fin de la Etiqueta :"+name);			
 		}}
 	
 	private class TitleGroupReceiver extends Receiver{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
-			return null;
+			logger.debug("Etiqueta :"+name);
+			
+			return new ArticleTittleReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// TODO Auto-generated method stub
-			
+			logger.debug("Fin de la Etiqueta :"+name);
+			parserStack.push(new ContribGroupReceiver());
+			logger.debug("estado de la pila "+parserStack.toString());
 		}}
 	
 	private class ArticleTittleReceiver extends Receiver {
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO coger el nombre del fichero
+			logger.debug("Etiqueta :"+name);
 			return new SentenceReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// TODO Auto-generated method stub
-			
+			titlePaper = contenido;
+			contenido = new String();
 		}}
 	
 	private class ContribGroupReceiver extends Receiver{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
-			return null;
+			return new ContribReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// TODO Auto-generated method stub
+			// FIXME cuando se llega a esta etiqueta hay que terminar el parseado
+		}
+		
+	}
+	
+	private class ContribReceiver extends Receiver{
+
+		@Override
+		Receiver processData(String name, Attributes attrs) {
+			return new NameReceiver();
+		}
+
+		@Override
+		void finishProcessData(String name) {
 			
 		}
 		
@@ -314,14 +396,15 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
+			logger.debug("estamos en name receiver proccess");
 			return null;
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			// TODO Auto-generated method stub
-			
+			authors.add(new String(contenido));
+			contenido = new String();
+			logger.debug("fin de name receiver proccess");
 		}
 		
 	}
@@ -330,14 +413,20 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		void finishProcessData(String name) {
 			// TODO coger los characters
-			
+			logger.info("Fin de la etiqueta S");
+			logger.info("contenido: "+contenido);
+			// TODO coger el nombre del fichero
+			fileName = contenido;
+			titlePaper = contenido;
+			// si aquí lo hemos usado habría que vaciarlo
+			contenido = new String();
+//			parserStack.push(new NameReceiver());
 		}
 		
 	}
@@ -349,19 +438,20 @@ public class XML2RO extends DefaultHandler{
 				p.parse();
 			}
 			p.end();
-			FileWriter out = null;
-			try {
-			   // OR Turtle format - compact and more readable
-			  out = new FileWriter( p.getFileName());
-			  p.model.write( out, "Turtle" );
-			} catch (IOException e) {
-				p.logger.error(e.getMessage());
-			}
-			finally {
-			  if (out != null) {
-			    try {out.close();} catch (IOException ignore) {}
-			  }
-			}
+			
+//			FileWriter out = null;
+//			try {
+//			   // OR Turtle format - compact and more readable
+//			  out = new FileWriter( p.getFileName());
+//			  p.model.write( out, "Turtle" );
+//			} catch (IOException e) {
+//				p.logger.error(e.getMessage());
+//			}
+//			finally {
+//			  if (out != null) {
+//			    try {out.close();} catch (IOException ignore) {}
+//			  }
+//			}
 
 		}
 }
