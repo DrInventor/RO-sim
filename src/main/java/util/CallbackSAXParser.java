@@ -41,13 +41,10 @@ public class CallbackSAXParser extends DefaultHandler {
 		abstract void finishProcessData(String name);
 	}
 
-	// TODO Receiver para SDO
 	private class SDOReceiver extends Receiver{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-//			logger.info("Estamos en una nueva sentence anotada");
-//			logger.info(this.toString()+" name: "+name+" attributes: "+attrs.toString());
 			return new SDOReceiver();
 		}
 
@@ -97,8 +94,6 @@ public class CallbackSAXParser extends DefaultHandler {
 
 	}
 
-	// Receiver del principio del documento
-	// mi objetivo es construir un modelo RDF
 	private class StartReceiver extends Receiver{
 
 		public void finishProcessData(String name) {
@@ -107,7 +102,6 @@ public class CallbackSAXParser extends DefaultHandler {
 
 		public Receiver processData(String name, Attributes attrs) {			
 
-			// TODO cogemos el nombre del documento
 			logger.info("Empezamos a procesar el documento");
 
 			logger.info(this.toString()+" name: "+name+" attributes: "+attrs.toString());
@@ -214,7 +208,8 @@ public class CallbackSAXParser extends DefaultHandler {
 	 * Esta funcion es llamada cuando ve el contenido de una etiqueta      
 	 */
 	public void characters(char buf[], int offset, int len) throws SAXException{
-		// FIXME no coge bien todo el contenido entre etiquetas
+		// necessary to link together the whole sentence 
+		//(if there are some \n or . the function brokes up in several characters)
 		contenido = contenido+new String(buf, offset, len);
 		logger.debug("contenido de la etiqueta "+contenido);
 	}
@@ -223,7 +218,6 @@ public class CallbackSAXParser extends DefaultHandler {
 		boolean _ok = false;
 		// Crear la fabrica utilizar para SAX 
 		SAXParserFactory factory  = SAXParserFactory.newInstance();
-
 		try { 
 			saxParser = factory.newSAXParser();
 			xmlFilename = xmlFile;
@@ -241,17 +235,15 @@ public class CallbackSAXParser extends DefaultHandler {
 
 	public void parse() {
 		try {
-			// StartReceiver implementa Receiver y es el responsable de 
-			// la primera etiqueta que envuelve a todo el XML
 			parserStack.push(new StartReceiver());
 			InputStream ficEntrada=null;
 			if ((ficEntrada=new FileInputStream(xmlFilename)) != null)
 				saxParser.parse( ficEntrada, this );
 
 		} catch (SAXException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -271,7 +263,7 @@ public class CallbackSAXParser extends DefaultHandler {
 		try {
 		   // OR Turtle format - compact and more readable
 		  // use this variant if you're not sure which to use!
-		  out = new FileWriter( p.getFileName());
+		  out = new FileWriter("src/test/resources/data/"+ p.getFileName());
 		  p.model.write( out, "Turtle" );
 			p.logger.debug("total number of sentences: "+p.contador);
 		} catch (IOException e) {
