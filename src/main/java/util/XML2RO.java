@@ -102,48 +102,6 @@ public class XML2RO extends DefaultHandler{
 		Receiver candidate = parserStack.peek();
 		Receiver followUp = null;	
 
-		//		if (name.equals(articleTitle))
-		//			followUp = ((ArticleTittleReceiver)candidate).processData(name, attrs);
-		//
-		//		else if (name.equals("doi")){
-		//			followUp = ((DoiReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals("s")) {
-		//
-		//			followUp = ((SentenceReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals(XML2RO.name)){
-		//
-		//			followUp = ((NameReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals(meta)){
-		//			
-		//			followUp = ((MetaReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals(article)){
-		//			
-		//			followUp = ((ArticleReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals(front)){
-		//			
-		//			followUp = ((FrontReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals(titleGroup)){
-		//			
-		//			followUp = ((TitleGroupReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals(contribGroup)){
-		//			
-		//			followUp = ((ContribGroupReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals(contrib)){
-		//			
-		//			followUp = ((ContribReceiver)candidate).processData(name, attrs);
-		//		}
-		//		else if (name.equals("pdfx")){
-		//			followUp = ((StartReceiver)candidate).processData(name, attrs);			
-		//		}
-
 		if (name.equals("doi") ||
 				name.equals("s") || name.equals(XML2RO.name) || name.equals(articleTitle) || 
 				name.equals(meta) || name.equals(article) || name.equals(front) || name.equals(titleGroup) ||
@@ -154,15 +112,13 @@ public class XML2RO extends DefaultHandler{
 		if (followUp!=null) {
 			parserStack.push(followUp);
 		}
-		//		else
-		//			parserStack.push(candidate); 
+		
 		logger.debug("estado de la pila "+parserStack.toString());
 
 	}
 
 	public void endElement(String uri, String local, String name) throws SAXException {
-		// si no he añadido a la pila no hago nada
-		logger.info("EStamos en end elemento: "+uri+" - "+local+" - "+name);
+		logger.debug("EStamos en end elemento: "+uri+" - "+local+" - "+name);
 		if (name.equals("doi") ||
 				name.equals("s") || name.equals("name") || name.equals(articleTitle) || 
 				name.equals(meta) || name.equals(article) || name.equals(front) || name.equals(titleGroup) ||
@@ -479,7 +435,6 @@ public class XML2RO extends DefaultHandler{
 		}
 		finally {
 			p.end();
-			// escribir el model a fichero
 			p.modelToFile();
 		}
 	}
