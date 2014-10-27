@@ -22,7 +22,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 
-public class CallbackSAXParser extends DefaultHandler {
+public class SDOParser extends DefaultHandler {
 
 	/**
 	 * Interfaz para implementar una pila de callbacks en SAX
@@ -171,7 +171,7 @@ public class CallbackSAXParser extends DefaultHandler {
 	private Stack<Receiver> parserStack;
 	private Model model;
 
-	public CallbackSAXParser() {
+	public SDOParser() {
 		parserStack = new Stack<Receiver>();
 	}
 
@@ -254,7 +254,7 @@ public class CallbackSAXParser extends DefaultHandler {
 
 	// EJEMPLO DE USO
 	public static void main(String[] args) {
-		CallbackSAXParser p = new CallbackSAXParser();
+		SDOParser p = new SDOParser();
 		if (p.init("src/test/resources/data/A31_C01_A_Data-driven_Approach_for_Real-Time_Clothes_Simulation__CORPUS__v3.xml")){
 			p.parse();
 		}

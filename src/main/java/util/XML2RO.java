@@ -143,6 +143,9 @@ public class XML2RO extends DefaultHandler{
 	}
 
 	public boolean init(String xmlFile){
+		
+				int index = xmlFile.indexOf(".xml");
+				fileName = xmlFile.substring(0, index);
 		boolean _ok = false;
 		// Crear la fabrica utilizar para SAX 
 		SAXParserFactory factory  = SAXParserFactory.newInstance();
@@ -223,7 +226,8 @@ public class XML2RO extends DefaultHandler{
 		try {
 			// OR Turtle format - compact and more readable
 			// FIXME poner bien el path
-			out = new FileWriter( "src/test/resources/data/"+getFileName()+".ttl");
+			String newFileName = fileName.replaceAll("[^a-zA-Z0-9]", "");
+			out = new FileWriter( "src/test/resources/data/ro-"+newFileName+".ttl");
 			model.write( out, "Turtle" );
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -241,6 +245,7 @@ public class XML2RO extends DefaultHandler{
 		logger.debug("doi del artículo: "+doiPaper);
 		logger.debug("tittle del paper: "+titlePaper);
 		logger.debug("lista de autores: "+authors.toString());
+		modelToFile();
 //		createModel();
 		
 
