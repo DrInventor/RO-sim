@@ -20,6 +20,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * Parser for the XML files annotated with SDO and generates an RDF file.
@@ -93,8 +94,9 @@ public class SDOParser extends DefaultHandler {
 			// create the resource
 			Resource sentence = model.createResource(":sentence"+contador);
 			sentence.addProperty(a, sdoP);
-			Property hascontent = model.createProperty(sdo+"has_content");
-			sentence.addProperty(hascontent, contenido);
+//			Property hascontent = model.createProperty(sdo+"has_content");
+//			Property hascontent = model.createProperty(sdo+"has_content");
+			sentence.addProperty(RDFS.label, contenido);
 			contador++;
 			contenido = new String();
 		}
