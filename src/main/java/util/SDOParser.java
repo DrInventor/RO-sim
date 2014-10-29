@@ -21,10 +21,15 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
-
+/**
+ * Parser for the XML files annotated with SDO and generates an RDF file.
+ * 
+ * @author Almudena Ruiz-Iniesta almudenari@fi.upm.es
+ *
+ */
 public class SDOParser extends DefaultHandler {
 
-	/**
+	/*
 	 * Interfaz para implementar una pila de callbacks en SAX
 	 * Extraido de http://www.gamasutra.com/view/feature/2678/efficient_xml_file_reading_for_.php
 	 * @author almudena ruiz-iniesta (almudenaris@gmail.com)
@@ -86,8 +91,10 @@ public class SDOParser extends DefaultHandler {
 			}
 			Property sdoP = model.createProperty(sdo+label);			
 			// create the resource
-			Resource sentence = model.createResource(":sentence"+contador);			
-			sentence.addProperty(sdoP, contenido);
+			Resource sentence = model.createResource(":sentence"+contador);
+			sentence.addProperty(a, sdoP);
+			Property hascontent = model.createProperty(sdo+"has_content");
+			sentence.addProperty(hascontent, contenido);
 			contador++;
 			contenido = new String();
 		}
@@ -255,7 +262,7 @@ public class SDOParser extends DefaultHandler {
 	// EJEMPLO DE USO
 	public static void main(String[] args) {
 		SDOParser p = new SDOParser();
-		if (p.init("src/test/resources/data/A31_C01_A_Data-driven_Approach_for_Real-Time_Clothes_Simulation__CORPUS__v3.xml")){
+		if (p.init("src/test/resources/data/cloth/A Data-driven Approach for Real-Time Clothes Simulation/A31_C01_A_Data-driven_Approach_for_Real-Time_Clothes_Simulation__CORPUS__v3.xml")){
 			p.parse();
 		}
 		p.end();
