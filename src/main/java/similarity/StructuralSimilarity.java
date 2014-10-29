@@ -18,6 +18,19 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+/**
+ * This class implements the following methods to compute the similarity of two ROs
+ * 
+ * The similarity is computed using a weigthed metric of two partial similarities
+ * statementSimilarity and aggregated Resources similarity
+ * The first one computes the similarity of the statements of two models (shares S,P y O). 
+ * It computes according to the jaccard index the similarity of two sets of statements
+ * The second one computes the similarity of the aggregated resources (ore:aggregates) in two ROs.
+ * This similarity also makes use of the jaccard index comparing the sets of aggregated resources that appears in the ROs.
+ * The idea behind the approach is that ROs are more similar if they aggregate the same resources.
+ * @author Almudena Ruiz-Iniesta almudenari@fi.upm.es
+ *
+ */
 public class StructuralSimilarity {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -163,7 +176,7 @@ public class StructuralSimilarity {
 		logger.debug("Agreggated resources objects similarity: "+aggregatedSimilarity);
 		// weighted metric for compute similarity 
 		double alpha = 0.50;		
-		return 0.50*statements + (1-alpha)*aggregatedSimilarity;
+		return alpha*statements + (1-alpha)*aggregatedSimilarity;
 	}
 
 	// TODO hacer test de este método

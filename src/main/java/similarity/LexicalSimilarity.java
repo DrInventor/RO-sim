@@ -10,8 +10,10 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
-/*
- * employ the dc:creator information to produce relations among other authors
+/**
+ * This class computes the similarity employing different characteristic of the RO model. 
+ * Currently, we employ the dc:creator information to produce relations among other authors.
+ * 
  */
 public class LexicalSimilarity {
 	Logger logger = LoggerFactory.getLogger(this.getClass());

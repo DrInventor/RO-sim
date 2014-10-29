@@ -9,11 +9,13 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-/*
- * comparing the sets of individuals. 
+/**
+ * The metrics implemented in this class focus on comparing the sets of individuals. 
  * The intuitive principle in instance-based technique is 
  * that when a pair of concepts is associated with 
  * the same set of objects, they are likely to be similar.
+ * 
+ * We compute the similarity metric in objetc and subjects following in both metrics the jaccard index approach
  */
 public class ExtensionalSimilarity {
 

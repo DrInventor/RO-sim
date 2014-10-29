@@ -11,6 +11,8 @@ import java.util.Stack;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -23,6 +25,13 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+/**
+ * Parser the XML files produced by PDFX (@see http://pdfx.cs.man.ac.uk/) and produces an RO in RDF
+ * with the aggregated resources (i.e. the pdf and the file with the sdo annotations)
+ * 
+ * @author Almudena Ruiz-Iniesta almudenari@fi.upm.es
+ *
+ */
 public class XML2RO extends DefaultHandler{
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -228,7 +237,10 @@ public class XML2RO extends DefaultHandler{
 			// FIXME poner bien el path
 			String newFileName = fileName.replaceAll("[^a-zA-Z0-9]", "");
 			out = new FileWriter( "src/test/resources/data/ro-"+newFileName+".ttl");
-			model.write( out, "Turtle" );
+			//TODO NO LO CREA BIEN
+			model.write( System.out, Lang.TURTLE.getName() );
+//			RDFDataMgr.write(out, model, Lang.TURTLE);
+//			model.write( out, "TURTLE" );
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}

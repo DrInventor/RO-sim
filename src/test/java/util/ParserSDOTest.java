@@ -10,15 +10,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ParserTest {
-	
+public class ParserSDOTest {
+
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
 	public static final String FILE_PATH = "src/test/resources/data/";
-	
-	private List<File> list = new ArrayList<File>();
 
+	private List<File> list = new ArrayList<File>();
 
 	// all the files to be indexed are in @directory
 	private List<File> indexAllFilesInDirectory(Path directory){
@@ -38,7 +37,7 @@ public class ParserTest {
 			} else {
 				String filename = file.getName().toLowerCase();		      
 				// Only index xml files produced by PDFX		      
-				if (filename.endsWith(".xml") && !filename.endsWith("v3.xml")) {
+				if (filename.endsWith(".xml") && filename.endsWith("v3.xml")) {
 					list.add(file);
 				} else {
 					System.out.println("Skipped " + filename);
@@ -46,28 +45,27 @@ public class ParserTest {
 			}
 		return list;
 	}
-	
+
 	@Test
-	public void listAllTheFile(){
+	public void parseAllTheFiles(){
 		Path pathDirectory = Paths.get(FILE_PATH);
 		indexAllFilesInDirectory(pathDirectory);
 		logger.info(list.toString());
-		
-		XML2RO p = new XML2RO();
-			for (File file: list){
-				String name = file.getAbsolutePath();
-				logger.debug("Comenzamos a procesar el fichero: "+name);
-				try{
-					if (p.init(name))
-						p.parse();
-				}
-				finally {
-					//TODO añadir el resto de recursos agregados haciendo un
-					// p.addAgregatedResource y pasarle la lissta de documentos
-					p.end();
-					logger.debug("Fichero creado");
-				}
-			}		
+
+		SDOParser p = new SDOParser();
+
+		for (File file: list){
+			String name = file.getAbsolutePath();
+			logger.debug("Comenzamos a procesar el fichero: "+name);
+			try{
+				if (p.init(name))
+					p.parse();
+			}
+			finally {
+				p.end();
+				logger.debug("Fichero creado");
+			}
+		}
 	}
 
 }

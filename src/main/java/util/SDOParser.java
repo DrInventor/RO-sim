@@ -258,8 +258,35 @@ public class SDOParser extends DefaultHandler {
 
 	public void end() {
 		// Si hay que hacer algo al finalizar
+		logger.debug("Escribimos el resultado a fichero: ");
+		
+		modelToFile();
 	}
 
+
+	private void modelToFile() {
+		FileWriter out = null;
+		try {
+			// OR Turtle format - compact and more readable
+			// use this variant if you're not sure which to use!
+			String newFileName = fileName.replaceAll("[^a-zA-Z0-9]", "");
+			out = new FileWriter( "src/test/resources/data/sdo-"+newFileName+".ttl");
+			model.write( out, "Turtle" );
+			logger.debug("total number of sentences: "+contador);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+
+		finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException ignore) {
+
+				}
+			}
+		}		
+	}
 
 	// EJEMPLO DE USO
 	public static void main(String[] args) {
