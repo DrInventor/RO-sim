@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -151,10 +153,11 @@ public class XML2RO extends DefaultHandler{
 		logger.debug("contenido de la etiqueta "+contenido);
 	}
 
+	// nos pasan el path completo
 	public boolean init(String xmlFile){
 		
-				int index = xmlFile.indexOf(".xml");
-				fileName = xmlFile.substring(0, index);
+		int index = xmlFile.indexOf(".xml");
+		fileName = xmlFile.substring(0, index);
 		boolean _ok = false;
 		// Crear la fabrica utilizar para SAX 
 		SAXParserFactory factory  = SAXParserFactory.newInstance();
@@ -234,13 +237,9 @@ public class XML2RO extends DefaultHandler{
 		FileWriter out = null;
 		try {
 			// OR Turtle format - compact and more readable
-			// FIXME poner bien el path
 			String newFileName = fileName.replaceAll("[^a-zA-Z0-9]", "");
 			out = new FileWriter( "src/test/resources/data/ro-"+newFileName+".ttl");
-			//TODO NO LO CREA BIEN
-			model.write( System.out, Lang.TURTLE.getName() );
-//			RDFDataMgr.write(out, model, Lang.TURTLE);
-//			model.write( out, "TURTLE" );
+			model.write(out, "TURTLE" );
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
@@ -252,15 +251,11 @@ public class XML2RO extends DefaultHandler{
 	}
 
 	public void end() {
-		// Si hay que hacer algo al finalizar
 		logger.debug("Resultado final de las variables: ");
 		logger.debug("doi del artículo: "+doiPaper);
 		logger.debug("tittle del paper: "+titlePaper);
 		logger.debug("lista de autores: "+authors.toString());
 		modelToFile();
-//		createModel();
-		
-
 	}
 
 	private abstract class Receiver {		

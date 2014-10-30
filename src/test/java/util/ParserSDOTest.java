@@ -36,7 +36,7 @@ public class ParserSDOTest {
 				}
 			} else {
 				String filename = file.getName().toLowerCase();		      
-				// Only index xml files produced by PDFX		      
+				// Only index xml files with annotations	      
 				if (filename.endsWith(".xml") && filename.endsWith("v3.xml")) {
 					list.add(file);
 				} else {
