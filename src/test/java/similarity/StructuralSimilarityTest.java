@@ -21,6 +21,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+import es.oeg.om.similarity.StructuralSimilarity;
+
 public class StructuralSimilarityTest {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());

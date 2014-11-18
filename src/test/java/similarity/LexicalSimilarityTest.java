@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
+import es.oeg.om.similarity.LexicalSimilarity;
+
 public class LexicalSimilarityTest {
 	private LexicalSimilarity lexicalSimilarity = new LexicalSimilarity();
 	

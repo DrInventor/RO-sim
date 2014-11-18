@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.oeg.om.util.SDOParser;
+
 public class ParserSDOTest {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
