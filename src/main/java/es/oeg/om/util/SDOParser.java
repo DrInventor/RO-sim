@@ -1,4 +1,4 @@
-package util;
+package es.oeg.om.util;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -66,7 +66,7 @@ public class SDOParser extends DefaultHandler {
 				label = "Background";
 			}
 			else if (name.equals(DRI_Challenge)){
-				label = "Contribution";
+				label = "Hypothesis";
 			}
 			else if (name.equals(DRI_Challenge_Goal)){
 				label = "Goal";

@@ -1,4 +1,4 @@
-package similarity;
+package es.oeg.om.similarity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,14 +9,14 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.SetUtils;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+
+import es.oeg.om.util.SetUtils;
 
 /**
  * This class implements the following methods to compute the similarity of two ROs

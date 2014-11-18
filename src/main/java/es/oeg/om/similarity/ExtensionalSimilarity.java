@@ -1,4 +1,4 @@
-package similarity;
+package es.oeg.om.similarity;
 
 import java.util.List;
 
