@@ -48,7 +48,20 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.5</version>
 		</dependency>
-
+		<!-- http connections -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.6</version>
+		</dependency>
+		<!-- jackson library for json -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		
+		<!-- dependencies related to cider-cl -->
 		<dependency>
 			<groupId>cider-cl</groupId>
 			<artifactId>cider-cl</artifactId>
@@ -84,6 +97,8 @@
 			<artifactId>concurrent</artifactId>
 			<version>1.0</version>
 		</dependency>
+		
+		
 
 	</dependencies>
 
