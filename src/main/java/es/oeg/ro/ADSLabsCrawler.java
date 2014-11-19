@@ -19,23 +19,27 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.oeg.om.util.Locator;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 
 public class ADSLabsCrawler {
 
-	// FIXME poner el verdadro dev_key
-	// TODO pasar a fichero de properties
-	private final static String dev_key = "abc123";
+	private String dev_key;
 
 	private final static String adslabs_uri ="adslabs.org/adsabs/api/";
 	private final static String scheme_uri = "http";
 	private final static String path_search = "search/";
+	private final static String path_settings = "settings";
 
-	Logger logger = LoggerFactory.getLogger(this.getClass());
-
-
+	Logger logger = LoggerFactory.getLogger(this.getClass());	
+	
+	public ADSLabsCrawler(){
+		// locate the dev_key
+		dev_key = Locator.getDevKey(".ads/dev_key");
+		logger.info("dev key : "+dev_key);
+	}
+	
 	public void executeQuery(String query, String filter) throws IOException{
-
 
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 
@@ -46,11 +50,11 @@ public class ADSLabsCrawler {
 			.setScheme(scheme_uri)
 			.setHost(adslabs_uri)
 			.setPath(path_search)
-			.setParameter("q", query)
+			.setParameter("q", query)			
 			.setParameter("filter", filter)			
 			.setParameter("dev_key", dev_key)        
 			.build();
-
+			
 			HttpGet httpget = new HttpGet(uri);
 
 			// en prod no es buena idea mostrar dev_key !!!
@@ -108,7 +112,7 @@ public class ADSLabsCrawler {
 			URI uri = new URIBuilder()
 			.setScheme(scheme_uri)
 			.setHost(adslabs_uri)
-			.setPath("settings")						
+			.setPath(path_settings)						
 			.setParameter("dev_key", dev_key)        
 			.build();
 
@@ -132,20 +136,17 @@ public class ADSLabsCrawler {
 					new InputStreamReader((entity.getContent())));
 
 			String output;
-			System.out.println("Output from Server .... \n");
+			logger.info("Output from Server ....");
 			while ((output = br.readLine()) != null) {
 				logger.info(output);
 			}
 
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
-
+			logger.error(e.getMessage());
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			response.close();
 		}
@@ -158,7 +159,7 @@ public class ADSLabsCrawler {
 
 		//		crawler.executeQuery("transiting exoplanets", "database:astronomy");		
 //		crawler.executeQuery("author:Accomazzi, Alberto", null);		
-		crawler.accessSettings();		
-//				crawler.executeQuery("transiting exoplanets", "database:astronomy");		
+//		crawler.accessSettings();		
+		crawler.executeQuery("transiting exoplanets", "database:astronomy");		
 	}
 }
