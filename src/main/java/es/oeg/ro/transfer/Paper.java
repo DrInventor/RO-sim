@@ -18,6 +18,12 @@ public class Paper {
 	private List<String> _bibstem;
 	private Number _citation_count;
 	private String _pub;
+	// FIXME ver cómo parsear esto, en el json viene como :
+//	"[citations]":
+//    {
+//        "num_citations": 0,
+//        "num_references": 0
+//    },
 	private List<String> _citations;
 	private String _volume;
 	private List<String> _database;

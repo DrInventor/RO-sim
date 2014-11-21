@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Meta{
 	
-	private Object _api_version;
+//	private Object _api_version;
 	private Number _count;
 	private Number _hits;
 	private String _qtime;

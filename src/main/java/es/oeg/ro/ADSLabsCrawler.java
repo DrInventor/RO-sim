@@ -39,75 +39,88 @@ public class ADSLabsCrawler {
 		logger.info("dev key : "+dev_key);
 	}
 	
-	public void executeQuery(String query, String filter) throws IOException{
-
+	public URI buildURI(String query) throws URISyntaxException{
+		URI uri = new URIBuilder().setScheme(scheme_uri).setHost(adslabs_uri)
+				.setPath(path_search)
+				.setParameter("q", query)				
+				.setParameter("dev_key", dev_key)        
+				.build();
+		return uri;
+	}
+	
+	public URI buildURI(String query, String filter) throws URISyntaxException{
+		URI uri = new URIBuilder()
+		.setScheme(scheme_uri)
+		.setHost(adslabs_uri)
+		.setPath(path_search)
+		.setParameter("q", query)			
+		.setParameter("filter", filter)			
+		.setParameter("dev_key", dev_key)        
+		.build();
+		return uri;
+	}
+	
+	public ADSLabsResultsBean executeQuery(URI uri) throws ClientProtocolException, IOException{
+		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
-
 		CloseableHttpResponse response = null;
-
+		
 		try {
-			URI uri = new URIBuilder()
-			.setScheme(scheme_uri)
-			.setHost(adslabs_uri)
-			.setPath(path_search)
-			.setParameter("q", query)			
-			.setParameter("filter", filter)			
-			.setParameter("dev_key", dev_key)        
-			.build();
 			
 			HttpGet httpget = new HttpGet(uri);
-
+			
 			// en prod no es buena idea mostrar dev_key !!!
-			logger.info("Query executed: "+httpget.getURI());
-
+			logger.debug("Query executed: "+httpget.getURI());
+			
 			response =  httpclient.execute(httpget);
-
+			
 			if (response.getStatusLine().getStatusCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : "
 						+ response.getStatusLine().getStatusCode());
 			}
-
+			
 			logger.info("Response: "+response.getStatusLine().getReasonPhrase());
-
+			
 			HttpEntity entity = response.getEntity();
-
+			
 			if (entity != null) {
 				InputStream instream = entity.getContent();
 				
 				try {
 					// do something useful
-					ObjectMapper mapper =  new ObjectMapper();				
-
+					ObjectMapper mapper =  new ObjectMapper();
 					ADSLabsResultsBean map = mapper.readValue(instream, ADSLabsResultsBean.class);
-
 					logger.info("Meta section from the response: "+map.getMeta());
 					logger.info("Query results \n Size: "+map.getResults().get_docs().size());
-					logger.info("List of docs retrieved: "+map.getResults().toString());		
+					logger.info("List of docs retrieved: "+map.getResults().toString());						
+					return map;
 					
-
 				} finally {
 					instream.close();
 				}
 			}
-
-
-
-
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-
-		} finally {
+			
+		}  finally {
 			response.close();
 		}
+		return null;
+	}	
+	
+	public ADSLabsResultsBean search(String query) throws ClientProtocolException, IOException, URISyntaxException{
+		URI uri = buildURI(query);
+		return executeQuery(uri);		
+	}
+	
+	public ADSLabsResultsBean search(String query, String filter) throws IOException, URISyntaxException{
+		URI uri = buildURI(query,filter);
+		return executeQuery(uri);
 	}
 
 	public void accessSettings() throws IOException{
-		//		http://adslabs.org/adsabs/api/settings/?dev_key=...
-
-		CloseableHttpClient httpclient = HttpClients.createDefault();
+		//	http://adslabs.org/adsabs/api/settings/?dev_key=...
 
 		CloseableHttpResponse response = null;
-
+		
 		try {
 			URI uri = new URIBuilder()
 			.setScheme(scheme_uri)
@@ -115,6 +128,8 @@ public class ADSLabsCrawler {
 			.setPath(path_settings)						
 			.setParameter("dev_key", dev_key)        
 			.build();
+
+			CloseableHttpClient httpclient = HttpClients.createDefault();			
 
 			HttpGet httpget = new HttpGet(uri);
 
@@ -152,14 +167,4 @@ public class ADSLabsCrawler {
 		}
 	}
 
-	public static void main (String[] args) throws IOException{
-		ADSLabsCrawler crawler = new ADSLabsCrawler();
-		//		# Simple search for "black holes", restricted to astronomy content
-		//		http://adslabs.org/adsabs/api/search/?q=black+holes&filter=database:astronomy&dev_key=abc123
-
-		//		crawler.executeQuery("transiting exoplanets", "database:astronomy");		
-//		crawler.executeQuery("author:Accomazzi, Alberto", null);		
-//		crawler.accessSettings();		
-		crawler.executeQuery("transiting exoplanets", "database:astronomy");		
-	}
 }
