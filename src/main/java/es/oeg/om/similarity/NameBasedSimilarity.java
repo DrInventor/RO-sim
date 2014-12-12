@@ -1,5 +1,6 @@
 package es.oeg.om.similarity;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,10 +16,11 @@ import com.hp.hpl.jena.vocabulary.DCTerms;
  * Currently, we employ the dc:creator information to produce relations among other authors.
  * 
  */
-public class LexicalSimilarity {
+public class NameBasedSimilarity {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final Property dCTermsProperty = DCTerms.creator;
+	private HashMap<String, String> mapAuthors;
 	
 	// retrieve all the statements with dc:creator property
 	public List<RDFNode> getDCCreators(Model m) throws NullPointerException{
@@ -36,6 +38,20 @@ public class LexicalSimilarity {
 		}
 		list1.retainAll(list2);
 		return list1.size() > 0;		
+	}
+	
+	//update the information about the author and colleagues
+	public void updateAuthorMatrix(Model m1){
+		List<RDFNode> list1 = getDCCreators(m1);
+		for (RDFNode node: list1){
+			for (RDFNode node2: list1)
+				if (node.isURIResource() && node2.isURIResource()){
+					// añadirlo
+				}
+				else{
+					logger.warn("The author isn't an URI");
+				}
+		}
 	}
 	
 	

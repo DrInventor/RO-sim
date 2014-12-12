@@ -8,6 +8,7 @@ import es.upm.oeg.semanticmeasures.impl.monolingual.SoftTFIDFBetweenOntologyEnti
 /*
  * pruebas de similitud usando CIDER-CL como servicio para los papers anotados con SDO
  */
+//FIXME problemas con los import!!! RiotException
 public class CiderSimilarityTest {
 	
 	@Test

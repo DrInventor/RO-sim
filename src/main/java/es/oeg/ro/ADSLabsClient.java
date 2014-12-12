@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.oeg.om.util.Locator;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 
-public class ADSLabsCrawler {
+public class ADSLabsClient {
 
 	private String dev_key;
 
@@ -33,7 +33,7 @@ public class ADSLabsCrawler {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());	
 	
-	public ADSLabsCrawler(){
+	public ADSLabsClient(){
 		// locate the dev_key
 		dev_key = Locator.getDevKey(".ads/dev_key");
 		logger.info("dev key : "+dev_key);

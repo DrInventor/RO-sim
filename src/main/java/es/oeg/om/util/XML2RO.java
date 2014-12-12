@@ -27,6 +27,8 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+import es.oeg.om.util.exceptions.BreakParsingException;
+
 /**
  * Parser the XML files produced by PDFX (@see http://pdfx.cs.man.ac.uk/) and produces an RO in RDF
  * with the aggregated resources (i.e. the pdf and the file with the sdo annotations)

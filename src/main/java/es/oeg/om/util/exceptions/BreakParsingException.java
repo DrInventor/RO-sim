@@ -1,4 +1,4 @@
-package es.oeg.om.util;
+package es.oeg.om.util.exceptions;
 
 import org.xml.sax.SAXException;
 
