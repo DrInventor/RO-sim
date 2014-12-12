@@ -11,13 +11,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.oeg.ro.ADSLabsCrawler;
+import es.oeg.ro.ADSLabsClient;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 
 public class ADSLabsCrawlerTest {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	ADSLabsCrawler crawler = new ADSLabsCrawler();
+	ADSLabsClient crawler = new ADSLabsClient();
 
 	@Test
 	public void executeQueryWithTerms() throws IOException, URISyntaxException{
