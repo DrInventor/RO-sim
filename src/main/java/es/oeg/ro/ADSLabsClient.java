@@ -37,6 +37,8 @@ public class ADSLabsClient {
 		// locate the dev_key
 		dev_key = Locator.getDevKey(".ads/dev_key");
 		logger.info("dev key : "+dev_key);
+		if (dev_key == null)
+			logger.error("Dev key not found");
 	}
 	
 	public URI buildURI(String query) throws URISyntaxException{

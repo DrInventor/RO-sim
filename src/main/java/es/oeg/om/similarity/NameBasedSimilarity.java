@@ -20,7 +20,7 @@ public class NameBasedSimilarity {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final Property dCTermsProperty = DCTerms.creator;
-	private HashMap<String, String> mapAuthors;
+	private HashMap<String, HashMap<String,Integer>> mapAuthors = new HashMap<String,HashMap<String,Integer>>();
 	
 	// retrieve all the statements with dc:creator property
 	public List<RDFNode> getDCCreators(Model m) throws NullPointerException{
@@ -50,6 +50,25 @@ public class NameBasedSimilarity {
 				}
 				else{
 					logger.warn("The author isn't an URI");
+					HashMap<String,Integer> RowVector;  
+			        int count;  
+			        String auth1,auth2;
+			        auth1 = node.asResource().getURI();
+			        auth2 = node2.asResource().getURI();
+			        
+			        if(mapAuthors.containsKey(auth1)) {  
+			            RowVector = mapAuthors.get(auth1);  
+			            if(RowVector.containsKey(auth2)) {  
+			               count = RowVector.get(auth2);  
+			               RowVector.put(auth2, ++count);  
+			            } else {  
+			                RowVector.put(auth2, 1);  
+			            }  
+			        } else {  
+			            RowVector = new HashMap<String, Integer>();  
+			            RowVector.put(auth2, 1);              
+			        } 			          
+			        mapAuthors.put(auth1,RowVector);
 				}
 		}
 	}
