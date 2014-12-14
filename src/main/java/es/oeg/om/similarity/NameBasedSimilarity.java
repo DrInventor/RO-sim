@@ -73,6 +73,16 @@ public class NameBasedSimilarity {
 		}
 	}
 	
+	public Integer howSimilarTwoAuthors(String author1, String author2){
+		if (mapAuthors.containsKey(author1)){
+			HashMap<String, Integer> row = mapAuthors.get(author1);
+			if (row.containsKey(author2)){
+				Integer coocurrence =row.get(author2);
+				return coocurrence;
+			}
+		}
+		return -1;
+	}
 	
 	// dc:creator ; dc:author ;
 	public double authorSimilarity(Model m1, Model m2){
