@@ -1,24 +1,26 @@
 =======
-RO-sim
+# RO-sim  (Research Objects Similarity) #
 ======
 
-This repository contains the approach to measure the similarity between ROs.
+This repository contains the approach to measure the similarity between ROs. This work is part of EU FP7 Project [DrInventor](http://drinventor.eu/)
 
+The similarity metrics are based on the ontology matching techniques.
 
-### What is this repository for? ###
+This repository contains:
+* Similarity metrics for assesment the similarity between two ROs.
+* A Java client to interact with NASA's ADS
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+##Status##
 
-### How do I get set up? ###
+The initial version of the similarity metrics based on ontology matching techniques is under development.
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+## Configuration
+
+## Dependencies
+
+## Database configuration
+
+## How to run tests
 
 ### A Java client to interact with NASA's ADS ###
 This project also includes a module to interact with NASA's ADS [http://labs.adsabs.harvard.edu/adsabs/](http://labs.adsabs.harvard.edu/adsabs/)
@@ -29,10 +31,11 @@ This project also includes a module to interact with NASA's ADS [http://labs.ads
 
 1. When you get your API key, save it to a file called ~/.ads/dev_key  
 
-### Contibutors ###
+## Contibutors ##
 
-* Almudena Ruiz-Iniesta
+* Almudena Ruiz-Iniesta, [http://www.oeg-upm.net/](OEG) [http://www.upm.es](UPM)
 
 ### License ###
 
-* Other community or team contact
+The ROs similarity approach is under [Apache License, Version 2.0] (../blob/master/LICENSE)
+
