@@ -1,6 +1,9 @@
-# README #
+=======
+RO-sim
+======
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contains the approach to measure the similarity between ROs.
+
 
 ### What is this repository for? ###
 
