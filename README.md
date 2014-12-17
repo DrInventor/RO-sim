@@ -12,22 +12,9 @@ This repository contains:
 
 The initial version of the similarity metrics based on ontology matching techniques is under development.
 
-## Configuration
+## Documentation
 
-## Dependencies
-
-## Database configuration
-
-## How to run tests
-
-### A Java client to interact with NASA's ADS ###
-This project also includes a module to interact with NASA's ADS [http://labs.adsabs.harvard.edu/adsabs/](http://labs.adsabs.harvard.edu/adsabs/)
-
-**Getting Started**
-
-1. You'll need an API key from NASA ADS labs.
-
-1. When you get your API key, save it to a file called ~/.ads/dev_key  
+A detailed description of the approach will be abailabe at (http://drinventor.eu/documents.html)
 
 ## Contibutors ##
 
