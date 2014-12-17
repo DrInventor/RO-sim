@@ -22,6 +22,18 @@
     </repositories>
     
 	<dependencies>
+	<!-- mongoDB -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+		
+		<dependency>
+    <groupId>org.mongojack</groupId>
+    <artifactId>mongojack</artifactId>
+    <version>2.1.0</version>
+</dependency>
 		<!-- testing -->
 		<dependency>
 			<groupId>junit</groupId>

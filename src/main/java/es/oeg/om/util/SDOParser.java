@@ -58,15 +58,14 @@ public class SDOParser extends DefaultHandler {
 		void finishProcessData(String name) {
 			// hacemos el procesamiento al final ya que será cuando tengamos el contenido de la etiqueta
 			String label = null;
-			//FIXME esto no se corresponde con SDO por las anotaciones que nos han pasado
 			if (name.equals(DRI_Approach)){
-				label = "Motivation";
+				label = "Method";
 			}
 			else if (name.equals(DRI_Background)){
 				label = "Background";
 			}
 			else if (name.equals(DRI_Challenge)){
-				label = "Hypothesis";
+				label = "Contribution";
 			}
 			else if (name.equals(DRI_Challenge_Goal)){
 				label = "Goal";
@@ -78,7 +77,7 @@ public class SDOParser extends DefaultHandler {
 				label = "FutureWork";	
 			}
 			else if (name.equals(DRI_Outcome)){
-				label = "Motivation";
+				label = "Results";
 			}
 			else if (name.equals(DRI_Outcome_Contribution)){
 				label = "Contribution";
