@@ -47,4 +47,9 @@ public class ADSLabsCrawlerTest {
 		assertNotNull(beanResults.getResults());
 		assertTrue(beanResults.getResults().get_docs().size() > 0);		
 	}
+	
+	@Test
+	public void searchCGpaper() throws ClientProtocolException, IOException, URISyntaxException{
+		crawler.searchCGpapers();
+	}
 }

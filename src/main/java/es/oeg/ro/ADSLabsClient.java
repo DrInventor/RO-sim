@@ -6,6 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -20,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.oeg.om.util.Locator;
+import es.oeg.ro.dao.DAOpapers;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 
 public class ADSLabsClient {
@@ -31,6 +37,10 @@ public class ADSLabsClient {
 	private final static String path_search = "search/";
 	private final static String path_settings = "settings";
 
+	private static final String journal_file = "src/main/resources/journals.txt";
+	
+	private DAOpapers daopapers = new DAOpapers();
+	
 	Logger logger = LoggerFactory.getLogger(this.getClass());	
 	
 	public ADSLabsClient(){
@@ -90,6 +100,7 @@ public class ADSLabsClient {
 					// do something useful
 					ObjectMapper mapper =  new ObjectMapper();
 					ADSLabsResultsBean map = mapper.readValue(instream, ADSLabsResultsBean.class);
+					
 					logger.info("Meta section from the response: "+map.getMeta());
 					logger.info("Query results \n Size: "+map.getResults().get_docs().size());
 					logger.info("List of docs retrieved: "+map.getResults().toString());						
@@ -164,6 +175,43 @@ public class ADSLabsClient {
 			logger.error(e.getMessage());
 		} finally {
 			response.close();
+		}
+	}
+	// based on the list of journals provided by BED retrieve all the records
+	public void searchCGpapers() throws URISyntaxException, ClientProtocolException, IOException{
+		
+		String query = null;
+		ADSLabsResultsBean result = new ADSLabsResultsBean(); 
+		List<String> listJournals = getKeywords(journal_file);
+		// get the list of the journals
+		for (String journal:listJournals){
+			// build the query
+			query = "keyword:"+journal;
+			URI uri = buildURI(query);
+			result = executeQuery(uri);	
+			saveToDatabase(result);
+		}
+		
+	}
+	
+	private void saveToDatabase(ADSLabsResultsBean result) {
+		daopapers.add(result);
+		logger.info("ya hemos añadido el paper");
+		// TODO VOY POR AQUI
+	}
+
+	private List<String> getKeywords(String resourceName){
+		try{			
+			Stream<String> lines = Files.lines(Paths.get(resourceName));
+			List<String> line = new ArrayList<String>();
+			lines.forEach(line::add);		
+			lines.close();
+			return line;
+		} catch (IOException e) {
+			return null;
+		}
+		catch (NullPointerException e) {
+			return null;
 		}
 	}
 
