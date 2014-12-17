@@ -1,8 +1,6 @@
-=======
 # RO-sim  (Research Objects Similarity) #
 ======
-
-This repository contains the approach to measure the similarity between ROs. This work is part of EU FP7 Project [DrInventor](http://drinventor.eu/)
+This repository contains the approach to measure the similarity between ROs. This work is part of [EU FP7 Project DrInventor](http://drinventor.eu/)
 
 The similarity metrics are based on the ontology matching techniques.
 
@@ -33,7 +31,7 @@ This project also includes a module to interact with NASA's ADS [http://labs.ads
 
 ## Contibutors ##
 
-* Almudena Ruiz-Iniesta, [http://www.oeg-upm.net/](OEG) [http://www.upm.es](UPM)
+* Almudena Ruiz-Iniesta, [OEG](http://www.oeg-upm.net/) [UPM](http://www.upm.es)
 
 ### License ###
 
