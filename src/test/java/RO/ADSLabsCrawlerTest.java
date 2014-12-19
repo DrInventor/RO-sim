@@ -49,6 +49,10 @@ public class ADSLabsCrawlerTest {
 	}
 	
 	@Test
+	public void checkPermissions() throws IOException{
+		crawler.accessSettings();
+	}
+	@Test
 	public void searchCGpaper() throws ClientProtocolException, IOException, URISyntaxException{
 		crawler.searchCGpapers();
 	}

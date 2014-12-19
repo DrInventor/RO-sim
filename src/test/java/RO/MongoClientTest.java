@@ -3,23 +3,17 @@ package RO;
 import java.net.UnknownHostException;
 import java.util.Set;
 
+import org.junit.Test;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class MongoClientTest {
 
-	// CHECKSTYLE:OFF
-	/**
-	 * Run this main method to see the output of this quick example.
-	 *
-	 * @param args takes no args
-	 * @throws UnknownHostException if it cannot connect to a MongoDB instance at localhost:27017
-	 */
-	public static void main(final String[] args) throws UnknownHostException {
+	@Test
+	public void basicTest() throws UnknownHostException {
 		// connect to the local database server
 		MongoClient mongoClient = new MongoClient();
 		/*

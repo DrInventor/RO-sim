@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.oeg.om.util.Locator;
 import es.oeg.ro.dao.DAOpapers;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
+import es.oeg.ro.transfer.Paper;
 
 public class ADSLabsClient {
 
@@ -186,20 +187,36 @@ public class ADSLabsClient {
 		ADSLabsResultsBean result = new ADSLabsResultsBean(); 
 		List<String> listJournals = getKeywords(journal_file);
 		// get the list of the journals
+		int rows = 0;
+		int start = 0;
 		for (String journal:listJournals){
 			// build the query
-			query = "keyword:"+journal;
-			URI uri = buildURI(query);
-			result = executeQuery(uri);	
+			query = "keyword:"+journal;				
+			result = search(query);
 			saveToDatabase(result);
+			int totalHits = result.getMeta().get_hits().intValue(); 
+			int count = result.getMeta().get_count().intValue();			
+			while (totalHits > count){
+				start = count + 1;				
+				query = "keyword:"+journal+"&start="+start;								
+				result = search(query);
+				saveToDatabase(result);
+				count += result.getMeta().get_count().intValue();
+			}	
+			
 		}
 		
 	}
 	
 	private void saveToDatabase(ADSLabsResultsBean result) {
-		daopapers.add(result);
-		logger.info("ya hemos añadido el paper");
-		// TODO VOY POR AQUI
+		if (result != null){
+			for(Paper p: result.getResults().get_docs()){
+				logger.debug("Paper added: "+p.toString());
+				daopapers.add(p);				
+			}
+		}
+
+
 	}
 
 	private List<String> getKeywords(String resourceName){
