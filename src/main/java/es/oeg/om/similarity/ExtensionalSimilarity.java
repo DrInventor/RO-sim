@@ -77,5 +77,15 @@ public class ExtensionalSimilarity {
 		return jaccard;	
 		
 	}
+	
+	//TODO
+	public void softTFIDF(){
+		
+	}
+	
+	//TODO
+	public void LSA(){
+		
+	}
 
 }

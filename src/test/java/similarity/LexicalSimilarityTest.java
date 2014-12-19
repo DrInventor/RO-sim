@@ -8,10 +8,10 @@ import org.junit.Test;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-import es.oeg.om.similarity.LexicalSimilarity;
+import es.oeg.om.similarity.NameBasedSimilarity;
 
 public class LexicalSimilarityTest {
-	private LexicalSimilarity lexicalSimilarity = new LexicalSimilarity();
+	private NameBasedSimilarity lexicalSimilarity = new NameBasedSimilarity();
 	
 	@Test
 	public void getAllDcAuthorsPrint(){
