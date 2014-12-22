@@ -1,4 +1,4 @@
-package es.oeg.ro;
+package es.oeg.ro.communication;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -82,7 +82,6 @@ public class ADSLabsClient {
 			
 			HttpGet httpget = new HttpGet(uri);
 			
-			// en prod no es buena idea mostrar dev_key !!!
 			logger.debug("Query executed: "+httpget.getURI());
 			
 			response =  httpclient.execute(httpget);

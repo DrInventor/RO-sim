@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.oeg.ro.ADSLabsClient;
+import es.oeg.ro.communication.ADSLabsClient;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 
 public class ADSLabsCrawlerTest {
