@@ -30,6 +30,8 @@ public class ROManager {
 	Authors listAuthors = new Authors();
 	private DAOpapers daopapers = new DAOpapers();
 
+	private DAOauthors daoauthors;
+
 	// from RDF
 	public void updatesAuthorInformation(Model model){
 		// take the authors of the RO and update the matrix of author
@@ -95,6 +97,8 @@ public class ROManager {
 			for(Paper p: result.getResults().get_docs()){
 				logger.debug("Paper added: "+p.toString());
 				daopapers.add(p);				
+				logger.debug("Authors information added");
+				daoauthors.add(p.get_author());
 			}
 		}
 
