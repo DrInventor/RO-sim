@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.oeg.om.util.Locator;
+import es.oeg.ro.ROManager;
 import es.oeg.ro.dao.DAOpapers;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 import es.oeg.ro.transfer.Paper;
@@ -40,7 +41,7 @@ public class ADSLabsClient {
 
 	private static final String journal_file = "src/main/resources/journals.txt";
 	
-	private DAOpapers daopapers = new DAOpapers();
+	private ROManager manager = new ROManager();
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());	
 	
@@ -180,43 +181,50 @@ public class ADSLabsClient {
 		}
 	}
 	// based on the list of journals provided by BED retrieve all the records
-	public void searchCGpapers() throws URISyntaxException, ClientProtocolException, IOException{
+	public void searchByKeyword() throws URISyntaxException, ClientProtocolException, IOException{
 		
 		String query = null;
 		ADSLabsResultsBean result = new ADSLabsResultsBean(); 
 		List<String> listJournals = getKeywords(journal_file);
 		// get the list of the journals
-		int rows = 0;
 		int start = 0;
 		for (String journal:listJournals){
 			// build the query
 			query = "keyword:"+journal;				
 			result = search(query);
-			saveToDatabase(result);
+			manager.saveToDatabase(result);
 			int totalHits = result.getMeta().get_hits().intValue(); 
 			int count = result.getMeta().get_count().intValue();			
 			while (totalHits > count){
 				start = count + 1;				
 				query = "keyword:"+journal+"&start="+start;								
 				result = search(query);
-				saveToDatabase(result);
+				manager.saveToDatabase(result);
 				count += result.getMeta().get_count().intValue();
-			}	
-			
+			}			
 		}
 		
 	}
 	
-	private void saveToDatabase(ADSLabsResultsBean result) {
-		if (result != null){
-			for(Paper p: result.getResults().get_docs()){
-				logger.debug("Paper added: "+p.toString());
-				daopapers.add(p);				
-			}
-		}
-
-
+	public void search(String facet, String fromYear, String toYear) throws ClientProtocolException, IOException, URISyntaxException{
+		String query = null;
+		ADSLabsResultsBean result = new ADSLabsResultsBean(); 
+		int start = 0;
+		// build the query
+		query = "year:["+fromYear+" TO "+toYear+"]";				
+		result = search(query);
+		manager.saveToDatabase(result);
+		int totalHits = result.getMeta().get_hits().intValue(); 
+		int count = result.getMeta().get_count().intValue();			
+		while (totalHits > count){
+			start = count + 1;				
+			query = "year:["+fromYear+" TO "+toYear+"]"+"&start="+start;								
+			result = search(query);
+			manager.saveToDatabase(result);
+			count += result.getMeta().get_count().intValue();
+		}			
 	}
+	
 
 	private List<String> getKeywords(String resourceName){
 		try{			

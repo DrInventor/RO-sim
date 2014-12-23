@@ -16,8 +16,11 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+import es.oeg.ro.dao.DAOpapers;
+import es.oeg.ro.transfer.ADSLabsResultsBean;
 import es.oeg.ro.transfer.Author;
 import es.oeg.ro.transfer.Authors;
+import es.oeg.ro.transfer.Paper;
 
 public class ROManager {
 
@@ -25,7 +28,9 @@ public class ROManager {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	Authors listAuthors = new Authors();
-	
+	private DAOpapers daopapers = new DAOpapers();
+
+	// from RDF
 	public void updatesAuthorInformation(Model model){
 		// take the authors of the RO and update the matrix of author
 		List<String> authors = getAuthors(model);
@@ -78,5 +83,21 @@ public class ROManager {
 			e.printStackTrace();	 
 		}
 		
+	}
+	
+	// get results from API and save authors to DB
+	public void addAuthor(){
+		
+	}
+	
+	public void saveToDatabase(ADSLabsResultsBean result) {
+		if (result != null){
+			for(Paper p: result.getResults().get_docs()){
+				logger.debug("Paper added: "+p.toString());
+				daopapers.add(p);				
+			}
+		}
+
+
 	}
 }

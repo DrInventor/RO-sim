@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import es.oeg.ro.communication.ADSLabsClient;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 
-public class ADSLabsCrawlerTest {
+public class ADSLabsClientTest {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	ADSLabsClient crawler = new ADSLabsClient();
@@ -52,8 +52,14 @@ public class ADSLabsCrawlerTest {
 	public void checkPermissions() throws IOException{
 		crawler.accessSettings();
 	}
+
 	@Test
 	public void searchCGpaper() throws ClientProtocolException, IOException, URISyntaxException{
-		crawler.searchCGpapers();
+		crawler.searchByKeyword();
+	}
+	
+	@Test
+	public void searchPaperFromyears() throws ClientProtocolException, IOException, URISyntaxException{
+		crawler.search(null,"2010","2014");
 	}
 }
