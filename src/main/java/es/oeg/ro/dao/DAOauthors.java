@@ -37,6 +37,8 @@ public class DAOauthors {
 	public void add(List<String> authors){
 		JacksonDBCollection<AuthorBSON, String> coll = JacksonDBCollection.wrap(dbCollection, AuthorBSON.class,
 				String.class);
-		WriteResult<Paper, String> result = coll.insert(author);
+		AuthorBSON author = null;
+		// me pasan la lista de autores de un paper y tengo que crear el BSON
+		WriteResult<AuthorBSON, String> result = coll.insert(author);
 	}
 }
