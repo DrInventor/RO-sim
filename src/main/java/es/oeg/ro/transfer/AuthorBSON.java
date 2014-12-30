@@ -5,17 +5,17 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AuthorBSON {
-	@JsonProperty private String id;
+	@JsonProperty private String _id;
 	
 	@JsonProperty private String name;
 	
 	@JsonProperty private List<Colleague> coll;
 	
 	public String getId() {
-		return id;
+		return _id;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this._id = id;
 	}
 	public String getName() {
 		return name;

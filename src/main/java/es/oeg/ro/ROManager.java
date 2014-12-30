@@ -31,7 +31,7 @@ public class ROManager {
 	Authors listAuthors = new Authors();
 	private DAOpapers daopapers = new DAOpapers();
 
-	private DAOauthors daoauthors;
+	private DAOauthors daoauthors = new DAOauthors();
 
 	// from RDF
 	public void updatesAuthorInformation(Model model){
