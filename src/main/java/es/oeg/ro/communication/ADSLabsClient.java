@@ -26,9 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.oeg.om.util.Locator;
 import es.oeg.ro.ROManager;
-import es.oeg.ro.dao.DAOpapers;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
-import es.oeg.ro.transfer.Paper;
 
 public class ADSLabsClient {
 
@@ -181,6 +179,12 @@ public class ADSLabsClient {
 		}
 	}
 	// based on the list of journals provided by BED retrieve all the records
+	/**
+	 * search + save in DB
+	 * @throws URISyntaxException
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public void searchByKeyword() throws URISyntaxException, ClientProtocolException, IOException{
 		
 		String query = null;
@@ -205,7 +209,15 @@ public class ADSLabsClient {
 		}
 		
 	}
-	
+	/**
+	 * search + save to DB
+	 * @param facet
+	 * @param fromYear
+	 * @param toYear
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public void search(String facet, String fromYear, String toYear) throws ClientProtocolException, IOException, URISyntaxException{
 		String query = null;
 		ADSLabsResultsBean result = new ADSLabsResultsBean(); 

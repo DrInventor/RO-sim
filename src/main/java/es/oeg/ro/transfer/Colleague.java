@@ -11,6 +11,10 @@ public class Colleague {
 	public String getId() {
 		return id;
 	}
+	@Override
+	public String toString() {
+		return "Colleague [id=" + id + ", num=" + num + ", name=" + name + "]";
+	}
 	public void setId(String id) {
 		this.id = id;
 	}

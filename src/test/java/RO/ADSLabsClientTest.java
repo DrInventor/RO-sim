@@ -60,6 +60,35 @@ public class ADSLabsClientTest {
 	
 	@Test
 	public void searchPaperFromyears() throws ClientProtocolException, IOException, URISyntaxException{
-		crawler.search(null,"2010","2014");
+		crawler.search(null,"2013","2014");
+	}
+	
+	@Test
+	public void searchByDoi(){
+		String doi = "10.1086/345794";
+		String query="doi:"
+				+ doi;
+		try {
+			ADSLabsResultsBean bean = crawler.search(query);
+			logger.info("Retrieved paper: "+bean.toString());
+			// tengo el origen, ahora hay que sugerir
+			// similitud de autores -> recuperar la
+		} catch (IOException | URISyntaxException e) {
+			logger.error("Something went wrong: "+e.getMessage());
+		}
+	}
+	@Test
+	public void searchByAuthor(){
+		String author = "\"Jarrett, T. H.\"";
+		String query="author:"
+				+ author;
+		try {
+			ADSLabsResultsBean bean = crawler.search(query);
+			logger.info("Retrieved paper: "+bean.toString());
+			// tengo el origen, ahora hay que sugerir
+			// similitud de autores -> recuperar la
+		} catch (IOException | URISyntaxException e) {
+			logger.error("Something went wrong: "+e.getMessage());
+		}
 	}
 }

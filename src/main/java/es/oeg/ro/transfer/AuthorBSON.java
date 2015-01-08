@@ -29,5 +29,10 @@ public class AuthorBSON {
 	public void setColl(List<Colleague> coll) {
 		this.coll = coll;
 	}
+	@Override
+	public String toString() {
+		return "AuthorBSON [_id=" + _id + ", name=" + name + ", coll=" + coll
+				+ "]";
+	}
 
 }

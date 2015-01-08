@@ -20,6 +20,7 @@ import es.oeg.ro.dao.DAOauthors;
 import es.oeg.ro.dao.DAOpapers;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 import es.oeg.ro.transfer.Author;
+import es.oeg.ro.transfer.AuthorBSON;
 import es.oeg.ro.transfer.Authors;
 import es.oeg.ro.transfer.Paper;
 
@@ -104,5 +105,12 @@ public class ROManager {
 		}
 
 
+	}
+
+	public AuthorBSON getAuthor(String s) {
+		if (s == null || s.isEmpty())
+			return null;
+		return daoauthors.getByName(s);
+		
 	}
 }

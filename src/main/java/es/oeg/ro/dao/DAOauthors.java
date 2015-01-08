@@ -39,39 +39,43 @@ public class DAOauthors {
 	}
 
 	public void add(List<String> authors){
-		if (authors == null || authors.size() <= 0)
-			throw new NullPointerException();
-		
-		JacksonDBCollection<AuthorBSON, String> coll = JacksonDBCollection.wrap(dbCollection, AuthorBSON.class,
-				String.class);		
-		
-		BasicDBObject whereQuery = new BasicDBObject();
-		whereQuery.put("name", authors.get(0));
-		DBCursor<AuthorBSON> result = coll.find(whereQuery);
-		if (result.size() > 0)
-			while(result.hasNext()) {
-			    AuthorBSON object = result.next();
-			    // are the same colleagues?
-			    if (object.getColl() != null && object.getColl().size() > 0){
-			    	logger.debug("update coauthors");
-			    	object = updateColleagues(coll, object, authors);
-			    }
-			    else{
-			    	logger.debug("Not co-authors yet");
-			    	object = addColleagues(object,authors);
-			    }
+		//		if (authors == null || authors.size() <= 0)
+		//			throw new NullPointerException();
+
+		if (authors != null && authors.size() > 0){
+
+
+			JacksonDBCollection<AuthorBSON, String> coll = JacksonDBCollection.wrap(dbCollection, AuthorBSON.class,
+					String.class);		
+
+			BasicDBObject whereQuery = new BasicDBObject();
+			whereQuery.put("name", authors.get(0));
+			DBCursor<AuthorBSON> result = coll.find(whereQuery);
+			if (result.size() > 0)
+				while(result.hasNext()) {
+					AuthorBSON object = result.next();
+					// are the same colleagues?
+					if (object.getColl() != null && object.getColl().size() > 0){
+						logger.debug("update coauthors");
+						object = updateColleagues(coll, object, authors);
+					}
+					else{
+						logger.debug("Not co-authors yet");
+						object = addColleagues(object,authors);
+					}
+				}
+			else{
+				//EL AUTOR PRINCIPAL NO ESTÁ
+				AuthorBSON author = new AuthorBSON();
+				author.setName(authors.get(0));
+				// FIXME hay que mirar si están los coautores
+				author = addColleagues(author, authors);			
+				// me pasan la lista de autores de un paper y tengo que crear el BSON
+				WriteResult<AuthorBSON, String> inserted = coll.insert(author);
+				logger.debug(inserted.getSavedId());
+			}
+			//FIXME falta actualizar la relación contraria (auth2 es principal auth1 no)
 		}
-		else{
-			//EL AUTOR PRINCIPAL NO ESTÁ
-			AuthorBSON author = new AuthorBSON();
-			author.setName(authors.get(0));
-			// FIXME hay que mirar si están los coautores
-			author = addColleagues(author, authors);			
-			// me pasan la lista de autores de un paper y tengo que crear el BSON
-			WriteResult<AuthorBSON, String> inserted = coll.insert(author);
-			logger.debug(inserted.getSavedId());
-		}
-		//FIXME falta actualizar la relación contraria (auth2 es principal auth1 no)
 	}
 
 	private AuthorBSON updateColleagues(JacksonDBCollection<AuthorBSON, String> coll, 
@@ -108,5 +112,15 @@ public class DAOauthors {
 			logger.debug("No co-authors");
 		}
 		return object;
+	}
+
+	public AuthorBSON getByName(String s) {
+		JacksonDBCollection<AuthorBSON, String> coll = JacksonDBCollection.wrap(dbCollection, AuthorBSON.class,
+				String.class);		
+		
+		BasicDBObject whereQuery = new BasicDBObject();
+		whereQuery.put("name", s);
+		DBCursor<AuthorBSON> result = coll.find(whereQuery);
+		return result.next();
 	}
 }
