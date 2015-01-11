@@ -96,6 +96,7 @@ public class DAOauthors {
 		return object;
 	}
 
+	//FIXME revisar por qué no se añaden los ID en los Colleague
 	private AuthorBSON addColleagues(AuthorBSON object, List<String> authors) {
 		if (authors.size() > 1)
 		{
@@ -120,7 +121,10 @@ public class DAOauthors {
 		
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("name", s);
+		logger.debug("Query to DB: "+ whereQuery.toString());
 		DBCursor<AuthorBSON> result = coll.find(whereQuery);
-		return result.next();
+		if (result.hasNext())
+			return result.next();
+		return null;
 	}
 }

@@ -23,7 +23,15 @@ public class SocialSimilarity {
 			logger.info("Author :"+author.toString());
 		}
 		
-		// hay que tener cuidado con papers sin autores -> no habría que añadirlos
+		List<String> authorsP2 = p2.get_author();
+		for (String s: authorsP2){
+			AuthorBSON author = manager.getAuthor(s);
+			if (author != null)
+				logger.info("Author :"+author.toString());
+			else
+				logger.info("Author: "+s+" not found");
+		}
+		//FIXME hay que tener cuidado con papers sin autores -> no habría que añadirlos
 		
 		return -1;
 	}
