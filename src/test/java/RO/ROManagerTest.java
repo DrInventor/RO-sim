@@ -1,5 +1,7 @@
 package RO;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,15 +10,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.hp.hpl.jena.rdf.model.Model;
 
 import es.oeg.ro.ROManager;
 
@@ -54,20 +53,21 @@ public class ROManagerTest {
 		return list;
 	}
 
-	@Test
-	public void getAuthorsInformation(){
-		Path pathDirectory = Paths.get(FILE_PATH);
-		indexAllFilesInDirectory(pathDirectory);
-		logger.info(list.toString());
-		ROManager manager = new ROManager();
-
-		for (File f:list){
-			// load the model
-			Model model1 = RDFDataMgr.loadModel(f.getPath() ,Lang.TURTLE) ;
-			manager.updatesAuthorInformation(model1);			
-		}
-		manager.writeResultsToFileJSON();
-	}
+//	FIXME MOVER A LA CLASE DE TEST DEL DAO RDF
+//	@Test
+//	public void getAuthorsInformation(){
+//		Path pathDirectory = Paths.get(FILE_PATH);
+//		indexAllFilesInDirectory(pathDirectory);
+//		logger.info(list.toString());
+//		ROManager manager = new ROManager();
+//
+//		for (File f:list){
+//			// load the model
+//			Model model1 = RDFDataMgr.loadModel(f.getPath() ,Lang.TURTLE) ;
+//			manager.updatesAuthorInformation(model1);			
+//		}
+//		manager.writeResultsToFileJSON();
+//	}
 
 	private static String checkBlanks( String str ){
 		String s = str.replaceAll("\\s+",""); //str.trim();
@@ -81,8 +81,7 @@ public class ROManagerTest {
 		for (File f:list){
 			// para cada fichero leemos las lineas si es <> entonces eliminamos blancos			
 //			String title = Files.lines( f.toPath() ).filter( pathName -> checkEmpty( pathName ) ).findFirst().get();
-//			logger.debug("Línea que sí empieza por < :"+title);			
-
+//			logger.debug("Línea que sí empieza por < :"+title);
 
 			try {
 				// input the file content to the String "input"
@@ -113,5 +112,64 @@ public class ROManagerTest {
 	private boolean checkEmpty(String str) {		
 		return str.startsWith("<");
 	}	
+	
+	@Test
+	public void testSimilarityTwoPapersNullAuthors(){
+		ROManager manager = new ROManager();
+		double similarity = manager.computeSocialSimilarity(null, null,1);		
+		assertTrue(similarity == -1);
+	}
+	
+	@Test
+	public void testSimilaritySameAuthors(){
+		ROManager manager = new ROManager();
+		String[] author1 = {"da Costa, F. P.",		
+				 "Pinto, J. T.", "Sasportes, R."};
+		
+		 
+		double similarity = manager.computeSocialSimilarity(
+				new ArrayList<String>(Arrays.asList(author1)),
+				new ArrayList<String>(Arrays.asList(author1)),1);
+	
+	}
+
+	@Test
+	public void testSimilarityTwoSetAuthors(){
+		ROManager manager = new ROManager();
+		String[] author1 = {"da Costa, F. P.",		
+				"Pinto, J. T.", "Sasportes, R."};
+		
+		String[] author2 ={
+				 "Su, Li",
+				 "Wang, Mengjue","Song, Shuguang","Niu, Yaoling"};
+		double similarity = manager.computeSocialSimilarity(
+				new ArrayList<String>(Arrays.asList(author1)),
+				new ArrayList<String>(Arrays.asList(author2)),4);
+		
+	}
+	
+	@Test
+	public void testSimilarityAuthorsSamePublications(){
+		ROManager manager = new ROManager();
+		String[] author1 = {"Sasportes, R."};
+		String[] author2 ={"da Costa, F. P."};
+		
+		double similarity = manager.computeSocialSimilarity(
+				new ArrayList<String>(Arrays.asList(author1)),
+				new ArrayList<String>(Arrays.asList(author2)),1);
+		
+	}
+	@Test
+	public void testSimilarityAuthors(){
+		ROManager manager = new ROManager();
+		String[] author1 = {"Terashima, A."};
+		String[] author2 ={"Antoja, T."};
+		
+		double similarity = manager.computeSocialSimilarity(
+				new ArrayList<String>(Arrays.asList(author1)),
+				new ArrayList<String>(Arrays.asList(author2)),5);
+		
+	}
+	
 
 }

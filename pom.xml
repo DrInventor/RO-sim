@@ -7,33 +7,39 @@
 	<name>ontologyMatching</name>
 
 	<repositories>
-    <!-- local repository for jar dependencies -->
-        <repository>
-            <id>lib</id>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <url>file://${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-    
+		<!-- local repository for jar dependencies -->
+		<repository>
+			<id>lib</id>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>ignore</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
-	<!-- mongoDB -->
+		<!-- mongoDB -->
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
 			<version>2.10.1</version>
 		</dependency>
-		
+
 		<dependency>
-    <groupId>org.mongojack</groupId>
-    <artifactId>mongojack</artifactId>
-    <version>2.1.0</version>
-</dependency>
+			<groupId>org.mongojack</groupId>
+			<artifactId>mongojack</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-community</artifactId>
+			<version>2.2.0-M02</version>
+		</dependency>
+
 		<!-- testing -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -72,32 +78,32 @@
 			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.13</version>
 		</dependency>
-		
+
 		<!-- dependencies related to cider-cl -->
 		<dependency>
 			<groupId>cider-cl</groupId>
 			<artifactId>cider-cl</artifactId>
 			<version>1.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>second-string</groupId>
 			<artifactId>second-string</artifactId>
 			<version>1.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>weka</groupId>
 			<artifactId>weka</artifactId>
 			<version>3.7.9</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>jcs</groupId>
 			<artifactId>jcs</artifactId>
 			<version>1.2.7.9</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
@@ -109,8 +115,8 @@
 			<artifactId>concurrent</artifactId>
 			<version>1.0</version>
 		</dependency>
-		
-		
+
+
 
 	</dependencies>
 

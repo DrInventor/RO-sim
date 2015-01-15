@@ -1,6 +1,8 @@
 package es.oeg.ro.transfer;
 
 public class Author {
+	
+	private String id;
 	private String name;
 	private int publications;
 	
@@ -28,5 +30,11 @@ public class Author {
 	public int incrementPublication(){
 		publications++;
 		return publications;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 }

@@ -2,8 +2,8 @@ package es.oeg.ro;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,65 +11,35 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+import es.oeg.ro.dao.DAOAuthorsNeo4j;
+import es.oeg.ro.dao.DAOAuthorsNeo4jImp;
 import es.oeg.ro.dao.DAOauthors;
 import es.oeg.ro.dao.DAOpapers;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
-import es.oeg.ro.transfer.Author;
 import es.oeg.ro.transfer.AuthorBSON;
 import es.oeg.ro.transfer.Authors;
 import es.oeg.ro.transfer.Paper;
 
 public class ROManager {
 
-	private final Property dCTermsProperty = DCTerms.creator;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	Authors listAuthors = new Authors();
+	
+	private Authors listAuthors = new Authors();	
 	private DAOpapers daopapers = new DAOpapers();
-
 	private DAOauthors daoauthors = new DAOauthors();
 
-	// from RDF
-	public void updatesAuthorInformation(Model model){
-		// take the authors of the RO and update the matrix of author
-		List<String> authors = getAuthors(model);
-		for (String author: authors){
-			// check if already exists
-			
-			Author auth = listAuthors.search(author); 
-			if (auth == null){
-				auth = new Author(author);
-				// TODO -> save to some db
-				listAuthors.add(auth);
-				auth.incrementPublication();
-			}
-			else
-				auth.incrementPublication();
-			
-		}
-	}
+	private DAOAuthorsNeo4j socialGraph;
 	
-	private List<String> getAuthors(Model model) {
-		List<String> allAuthors = new ArrayList<String>();
-		List<RDFNode> list = getDCCreators(model);
-		for (RDFNode node : list){
-			allAuthors.add(node.asLiteral().getString());
-		}
-		return allAuthors;
+	public ROManager(){
+		socialGraph =  DAOAuthorsNeo4j.getInstance();
+//		FIXME que hacer para crear los indices
+//		((DAOAuthorsNeo4jImp)socialGraph).init();	
 	}
 
-	// retrieve all the statements with dc:creator property
-	private List<RDFNode> getDCCreators(Model m) throws NullPointerException{
-		if (m == null) throw new NullPointerException("Parameter cannot be null");		
-		return m.listObjectsOfProperty(dCTermsProperty).toList();		
-	}
-	
-	
 	public void writeResultsToFileJSON(){
 		ObjectMapper mapper = new ObjectMapper();		
 		//FIXME cambiar ruta de fichero y lo que se guarda
@@ -89,18 +59,20 @@ public class ROManager {
 		
 	}
 	
-	// get results from API and save authors to DB
-	public void addAuthor(){
-		
-	}
-	
 	public void saveToDatabase(ADSLabsResultsBean result) {
 		if (result != null){
 			for(Paper p: result.getResults().get_docs()){
 				logger.debug("Paper added: "+p.toString());
-				daopapers.add(p);				
-				logger.debug("Authors information added");
-				daoauthors.add(p.get_author());
+				//TODO comentado para no volver a añadir más cosas a la base de datos de mongo
+//				daopapers.add(p);				
+//				logger.debug("Authors information added");
+//				daoauthors.add(p.get_author());
+				//TODO añadir al grafo
+				if (p.get_author() != null)
+					((DAOAuthorsNeo4jImp) socialGraph).addAuthors(p.get_author());
+				else{
+					logger.info("This paper has not authors");
+				}
 			}
 		}
 
@@ -112,5 +84,54 @@ public class ROManager {
 			return null;
 		return daoauthors.getByName(s);
 		
+	}
+
+	// buscar usuarios y calcular la similitud
+	// similitud a partir del índice de jaccard
+	public double computeSocialSimilarity(List<String> get_author, List<String> get_author2, int depth) {
+		if (get_author == null || get_author2== null || get_author.size()==0 || get_author2.size() == 0){
+			logger.error("The authors are null or empty");
+			return -1;
+		}
+
+		double[] similarities = new double[get_author.size()*get_author2.size()];
+		DAOAuthorsNeo4jImp daoNeo4j = ((DAOAuthorsNeo4jImp)DAOAuthorsNeo4j.getInstance());
+		
+		int i=0;
+		double numberTotalSharedPublicationsAuthor1,sharedPublications,numberTotalSharedPublicationsAuthor2,e;
+		
+		for (String author1: get_author){
+			// calcular la similitud con el resto
+			numberTotalSharedPublicationsAuthor1 = daoNeo4j.numberOfTotalSharedPublications(author1);
+			
+			for (String author2: get_author2){
+				
+				if (daoNeo4j.findAuthor(author1).getId().equals(daoNeo4j.findAuthor(author2).getId())){
+					logger.debug("Similarity between: "+author1+" and "+author2+" is : "+1.0);
+					similarities[i] = 1.0;
+				}
+				else{
+					sharedPublications = daoNeo4j.sharedPublications(author1, author2,depth);				
+					numberTotalSharedPublicationsAuthor2 = daoNeo4j.numberOfTotalSharedPublications(author2);
+					
+					// para no contar dos veces
+					numberTotalSharedPublicationsAuthor1 -= sharedPublications;
+					numberTotalSharedPublicationsAuthor2 -= sharedPublications;				
+					
+					e = (sharedPublications/(numberTotalSharedPublicationsAuthor1+numberTotalSharedPublicationsAuthor2-sharedPublications));
+					logger.debug("Similarity between: "+author1+" and "+author2+" is : "+e);
+					
+					//				similarities = daoNeo4j.similarity(author1,author2);
+					similarities[i] = e;
+					numberTotalSharedPublicationsAuthor1 += sharedPublications;
+				}
+				i++;				
+			}
+		}
+		double sum = DoubleStream.of(similarities).sum();
+		double finalSimilarity = sum / similarities.length;
+
+		logger.debug("Similarity between: "+get_author.toString()+" and "+get_author2.toString()+" is: "+finalSimilarity);
+		return finalSimilarity;
 	}
 }
