@@ -321,10 +321,7 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 				return (int) friendPath.lastRelationship().getProperty(PUBLICATIONS);
 			}
 			// fin de traverse
-//			for (Relationship neighbor : nodeAuthor.getRelationships(Direction.OUTGOING, RelTypes.CO_AUTHOR)) {
-//				if (neighbor.getEndNode().equals(nodeAuthor2))
-//					return (int) neighbor.getProperty(PUBLICATIONS);
-//			}
+
 			tx.success();		
 		}
 		catch (NullPointerException nullAuthor){

@@ -43,4 +43,6 @@ public class SocialSimilarityTest {
 		
 		social.socialSimilarity(p1, p2);
 	}
+	
+	
 }

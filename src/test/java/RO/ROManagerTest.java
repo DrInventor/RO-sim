@@ -113,6 +113,7 @@ public class ROManagerTest {
 		return str.startsWith("<");
 	}	
 	
+	// test related to social similarity with neo4j
 	@Test
 	public void testSimilarityTwoPapersNullAuthors(){
 		ROManager manager = new ROManager();
@@ -168,6 +169,7 @@ public class ROManagerTest {
 		double similarity = manager.computeSocialSimilarity(
 				new ArrayList<String>(Arrays.asList(author1)),
 				new ArrayList<String>(Arrays.asList(author2)),5);
+		assertTrue(similarity > 0);
 		
 	}
 	
