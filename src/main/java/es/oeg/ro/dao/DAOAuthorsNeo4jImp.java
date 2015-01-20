@@ -40,7 +40,7 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());	
 
-	private static final String MATRIX_DB = "target/matrix-new-db";
+	private static final String MATRIX_DB = "src/resources/matrix-new-db";
 
 	/** The Property key to use for names of persons */
 	public static final String AUTHOR_NAME = "name";
@@ -217,6 +217,8 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 			Label label = DynamicLabel.label( "Author" );
 			Node personNode = graphDb.findNode(label, AUTHOR_NAME, author);
 			int numberOfFriends = 0;
+			if (personNode == null)
+				return s+=author+" Author not found in DB";
 			logger.info( personNode.getProperty(AUTHOR_NAME) + "'s co-authors");
 			Traverser friendsTraverser = getCoauthors( personNode );
 			for ( Path friendPath : friendsTraverser ){
@@ -244,6 +246,8 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 
 			Node personNode = graphDb.findNode(label, AUTHOR_NAME, name);
 
+			if (personNode == null)
+				return null;
 			Author author = new Author((String) personNode.getProperty(AUTHOR_NAME));
 			author.setId(Long.toString(personNode.getId()));
 			tx.success();
@@ -278,7 +282,7 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 				return numPub;
 			}
 			tx.success();	
-			logger.debug("Author not found");
+			logger.debug(author1+" Author not found in DB");
 			return 0;
 		}
 	}

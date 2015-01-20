@@ -19,6 +19,13 @@
 			</snapshots>
 			<url>file://${project.basedir}/lib</url>
 		</repository>
+
+		<!-- Dr Inventor Text Mining Java Library from UPF -->
+		<repository>
+			<id>backingdata-repo</id>
+			<name>Backingdata repository</name>
+			<url>http://backingdata.org/dri/library/mavenRepo/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -34,19 +41,12 @@
 			<artifactId>mongojack</artifactId>
 			<version>2.1.0</version>
 		</dependency>
-		
+
+		<!-- Neo4j -->
 		<dependency>
 			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-community</artifactId>
+			<artifactId>neo4j</artifactId>
 			<version>2.2.0-M02</version>
-		</dependency>
-
-		<!-- testing -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -67,14 +67,24 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.5</version>
 		</dependency>
-		
+
+
+		<!-- testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+
 		<!-- http connections -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.3.6</version>
 		</dependency>
-		
+
 		<!-- jackson library for json -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -82,9 +92,73 @@
 			<version>1.9.13</version>
 		</dependency>
 
-		
+		<dependency>
+			<groupId>cider-cl</groupId>
+			<artifactId>cider-cl</artifactId>
+			<version>1.0</version>
+		</dependency>
 
+		<dependency>
+			<groupId>second-string</groupId>
+			<artifactId>second-string</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>weka</groupId>
+			<artifactId>weka</artifactId>
+			<version>3.7.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jcs</groupId>
+			<artifactId>jcs</artifactId>
+			<version>1.2.7.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>concurrent</groupId>
+			<artifactId>concurrent</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-modeler</groupId>
+			<artifactId>commons-modeler</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.ansell.pellet</groupId>
+			<artifactId>pellet-jena</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.ansell.pellet</groupId>
+			<artifactId>pellet-core</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hermit-reasoner</groupId>
+			<artifactId>org.semanticweb.hermit</artifactId>
+			<version>1.3.8.1</version>
+		</dependency>
+
+	<!-- Text mining library -->
+	<dependency>
+		<groupId>edu.upf.taln.dri</groupId>
+		<artifactId>lib</artifactId>
+		<version>0.0.2</version>
+	</dependency>
 	</dependencies>
+
 
 
 </project>

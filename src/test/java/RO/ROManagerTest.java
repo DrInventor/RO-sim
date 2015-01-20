@@ -161,7 +161,7 @@ public class ROManagerTest {
 		
 	}
 	@Test
-	public void testSimilarityAuthors(){
+	public void testSimilarityAuthorsNotFound(){
 		ROManager manager = new ROManager();
 		String[] author1 = {"Terashima, A."};
 		String[] author2 ={"Antoja, T."};
@@ -169,7 +169,20 @@ public class ROManagerTest {
 		double similarity = manager.computeSocialSimilarity(
 				new ArrayList<String>(Arrays.asList(author1)),
 				new ArrayList<String>(Arrays.asList(author2)),5);
-		assertTrue(similarity > 0);
+		assertTrue(similarity == -1);
+		
+	}
+	
+	@Test
+	public void testSimilarityAuthors(){
+		ROManager manager = new ROManager();
+		String[] author1 = {"Hearty, C."};
+		String[] author2 ={"Rysgaard, S."};
+		
+		double similarity = manager.computeSocialSimilarity(
+				new ArrayList<String>(Arrays.asList(author1)),
+				new ArrayList<String>(Arrays.asList(author2)),5);
+		assertTrue(similarity > 0 );
 		
 	}
 	

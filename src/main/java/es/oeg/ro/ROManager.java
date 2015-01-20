@@ -19,6 +19,7 @@ import es.oeg.ro.dao.DAOAuthorsNeo4jImp;
 import es.oeg.ro.dao.DAOauthors;
 import es.oeg.ro.dao.DAOpapers;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
+import es.oeg.ro.transfer.Author;
 import es.oeg.ro.transfer.AuthorBSON;
 import es.oeg.ro.transfer.Authors;
 import es.oeg.ro.transfer.Paper;
@@ -106,7 +107,13 @@ public class ROManager {
 			
 			for (String author2: get_author2){
 				
-				if (daoNeo4j.findAuthor(author1).getId().equals(daoNeo4j.findAuthor(author2).getId())){
+				Author auth1 = daoNeo4j.findAuthor(author1);
+				Author auth2 = daoNeo4j.findAuthor(author2);
+				if (auth1 == null || auth2 == null){
+					logger.info(author1+" OR "+author2+" not found in DB");
+					return -1;
+				}
+				else if (auth1.getId().equals(auth2.getId())){
 					logger.debug("Similarity between: "+author1+" and "+author2+" is : "+1.0);
 					similarities[i] = 1.0;
 				}

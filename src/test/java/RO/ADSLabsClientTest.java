@@ -60,7 +60,7 @@ public class ADSLabsClientTest {
 	
 	@Test
 	public void searchPaperFromyears() throws ClientProtocolException, IOException, URISyntaxException{
-		crawler.search(null,"2006","2006");
+		crawler.search(null,"2012","2012");
 	}
 	
 	@Test
