@@ -14,9 +14,9 @@ The initial version of the similarity metrics based on ontology matching techniq
 
 ## Documentation
 
-A detailed description of the approach will be abailabe at (http://drinventor.eu/documents.html)
+A detailed description of the approach will be available at (http://drinventor.eu/documents.html)
 
-## Contibutors ##
+## Contributors ##
 
 * Almudena Ruiz-Iniesta, [OEG](http://www.oeg-upm.net/) [UPM](http://www.upm.es)
 
