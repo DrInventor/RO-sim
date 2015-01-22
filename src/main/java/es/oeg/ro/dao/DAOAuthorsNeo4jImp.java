@@ -3,9 +3,6 @@ package es.oeg.ro.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.neo4j.graphalgo.GraphAlgoFactory;
-import org.neo4j.graphalgo.PathFinder;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -16,15 +13,12 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.graphdb.index.Index;
-import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.schema.IndexDefinition;
 import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
-import org.neo4j.kernel.Traversal;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +26,6 @@ import org.slf4j.LoggerFactory;
 import es.oeg.ro.transfer.Author;
 
 // see -> http://neo4j.com/docs/stable/tutorials-java-embedded-new-index.html
-// see also -> 
-// pasar a Singleton para que pueda hacer test tranquilamente
 public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 
 	private static final String PUBLICATIONS = "publications";
@@ -79,8 +71,7 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 
 	private void registerShutdownHook(){
 		// Registers a shutdown hook for the Neo4j instance so that it
-		// shuts down nicely when the VM exits (even if you "Ctrl-C" the
-		// running example before it's completed)
+		// shuts down nicely when the VM exits
 		Runtime.getRuntime().addShutdownHook( new Thread()	{
 			@Override
 			public void run()
@@ -99,8 +90,6 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 				authors.add(createNode(s));
 				logger.info("User created succesfuly");
 			}
-			// TODO pasar a recursivo
-//			Node primer = authors.remove(0);			
 			for(int i=0; i<authors.size(); i++)
 				for (int j= i; j<authors.size(); j++){
 					if (j != i) 
@@ -113,13 +102,7 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 		
 	}
 
-	//FIXME update to the new version
 	private boolean areCoauthors(Node node1, Node node2){
-//		PathFinder<Path> finder = GraphAlgoFactory.shortestPath(
-//		        Traversal.expanderForTypes( RelTypes.CO_AUTHOR ), 1 );
-//		Iterable<Path> paths = finder.findAllPaths( node1, node2 );
-		
-
 		Evaluation evaluationIfMatch = Evaluation.INCLUDE_AND_CONTINUE;
 		
 		Evaluation evaluationIfNoMatch = Evaluation.EXCLUDE_AND_CONTINUE;
@@ -289,7 +272,7 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 
 	public double sharedPublications(String author1, String author2, int depth) {
 		/*
-		 * look into a traversal/shortest-path starting at n1 and ending at n2 with a max_depth of 1.
+		 * look into a traversal/shortest-path starting at n1 and ending at n2 with max_depth.
 		 */
 		
 		try ( Transaction tx = graphDb.beginTx() ){
@@ -313,6 +296,7 @@ public class DAOAuthorsNeo4jImp extends DAOAuthorsNeo4j{
 					.evaluator(Evaluators.endNodeIs(evaluationIfMatch, evaluationIfNoMatch , nodeAuthor2))
 					;
 //					.evaluator(Evaluators.atDepth(depth));
+			
 			
 			
 			Traverser friendsTraverser = td.traverse( nodeAuthor );

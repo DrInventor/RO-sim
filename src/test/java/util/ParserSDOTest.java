@@ -58,14 +58,14 @@ public class ParserSDOTest {
 
 		for (File file: list){
 			String name = file.getAbsolutePath();
-			logger.debug("Comenzamos a procesar el fichero: "+name);
+			logger.debug("Start parsing the file: "+name);
 			try{
 				if (p.init(name))
 					p.parse();
 			}
 			finally {
 				p.end();
-				logger.debug("Fichero creado");
+				logger.debug("Done");
 			}
 		}
 	}

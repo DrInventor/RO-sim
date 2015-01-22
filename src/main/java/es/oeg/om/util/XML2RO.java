@@ -4,9 +4,11 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -34,6 +36,9 @@ import es.oeg.om.util.exceptions.BreakParsingException;
  */
 public class XML2RO extends DefaultHandler{
 
+	private static final String SRC_TEST_RESOURCES_DATA_RO = "src/test/resources/data/ro-";
+
+
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
@@ -45,6 +50,9 @@ public class XML2RO extends DefaultHandler{
 	private static final String contribGroup = "contrib-group";
 	private static final String contrib = "contrib";
 	private static final String name = "name";
+
+
+	public static final String URITitle = "http://rohub.linkeddata.es/drinventor/";
 
 	public XML2RO() {
 		parserStack = new Stack<Receiver>();
@@ -216,17 +224,28 @@ public class XML2RO extends DefaultHandler{
 		paper.addProperty(a, roResearchObject);
 		paper.addProperty(a, oreAggregation);
 
+		//FIXME improve: add URIs of authors not strings
+		/*
+		 * dc:creator [ a dc:Agent ;						
+						foaf:name "Joe"^^http://www.w3.org/2001/XMLSchema#string
+						] ;
+		 */
 		for (String author: authors2)
 			paper.addProperty(DCTerms.creator, author);
+		
 		paper.addProperty(DCTerms.title, titlePaper2);
 		Property oreAggregates = model.createProperty(ore+"aggregates");
-		// FIXME añadir URI del paper cuando lo pase a Path
+		
 
 		Property roResource = model.createProperty(ro+"Resource");
-		Resource pdf = model.createResource(titlePaper+".pdf").addProperty(a, roResource);
+		
+		String resourcePDF = URITitle +safeNamefromString(titlePaper2)+".pdf";		
+		Resource pdf = model.createResource(resourcePDF).addProperty(a, roResource);
 		paper.addProperty(oreAggregates, pdf);
+		
 
-		Resource sdo = model.createResource(titlePaper2+"-sdo.ttl").addProperty(a, roResource);
+		String resourceSDO = URITitle +safeNamefromString(titlePaper2)+"-sdo.ttl";
+		Resource sdo = model.createResource(resourceSDO).addProperty(a, roResource);
 		paper.addProperty(oreAggregates, sdo);
 
 	}
@@ -236,7 +255,7 @@ public class XML2RO extends DefaultHandler{
 		try {
 			// OR Turtle format - compact and more readable
 			String newFileName = fileName.replaceAll("[^a-zA-Z0-9]", "");
-			out = new FileWriter( "src/test/resources/data/ro-"+newFileName+".ttl");
+			out = new FileWriter( SRC_TEST_RESOURCES_DATA_RO+newFileName+".ttl");
 			model.write(out, "TURTLE" );
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -284,14 +303,14 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			logger.debug("Etiqueta :"+name);
+			logger.debug("Tag :"+name);
 			return new DoiReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			logger.debug("Fin de Etiqueta :"+name);
-			logger.debug("añadimos el article receiver");
+			logger.debug("End of tag :"+name);
+			logger.debug("added article receiver");
 			parserStack.push(new ArticleReceiver());
 		}
 
@@ -429,17 +448,45 @@ public class XML2RO extends DefaultHandler{
 		void finishProcessData(String name) {
 			logger.info("Fin de la etiqueta S");
 			logger.info("contenido: "+contenido);
-			fileName = contenido;
+			fileName =  contenido;
 			titlePaper = contenido;
 		}
 
+	}
+	
+	private String safeNamefromString(String name){
+		
+		if (name == null || name.isEmpty()){
+			throw new IllegalArgumentException("parameter must not be null or empty, actual vale: '" + name + "'");
+		}
+		
+		// 1. camel case
+		String camelCased = "";
+		String[] tokens = name.split("\\s");
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+            if (!token.isEmpty()){ // blank space are ignored
+                camelCased = camelCased + token.substring(0, 1).toUpperCase()
+                        + token.substring(1, token.length());
+            }
+
+		}
+		// 2. imtentamos limpiar simbolos
+		// eliminamos acentos y otras formas de representar: 
+		// http://stackoverflow.com/questions/1008802/converting-symbols-accent-letters-to-english-alphabet
+		String nfdNormalizedString = Normalizer.normalize(camelCased,
+				Normalizer.Form.NFD);
+		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		String result = pattern.matcher(nfdNormalizedString).replaceAll("");
+		// 3. eliminamos todos lo que no sea ni letras ni numeros.
+		return result.replaceAll("[^a-zA-Z0-9]", "");
 	}
 
 	// EJEMPLO DE USO
 	public static void main(String[] args) {
 		XML2RO p = new XML2RO();
 		try{
-			if (p.init("src/test/resources/data/A Data-driven Approach for Real-Time Clothes Simulation.xml")){
+			if (p.init("src/test/resources/old/A Data-driven Approach for Real-Time Clothes Simulation.xml")){
 				p.parse();
 			}
 		}

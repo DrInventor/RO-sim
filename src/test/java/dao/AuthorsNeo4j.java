@@ -17,7 +17,7 @@ public class AuthorsNeo4j {
 	Logger logger = LoggerFactory.getLogger(this.getClass());	
 
 
-	private static final String DB_PATH = "target/matrix-new-db";
+	private static final String DB_PATH = "src/resources/matrix-new-db";
 
 
 	DAOAuthorsNeo4jImp db;

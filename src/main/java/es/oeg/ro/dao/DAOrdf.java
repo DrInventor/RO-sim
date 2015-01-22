@@ -18,7 +18,6 @@ public class DAOrdf {
 	private Authors listAuthors = new Authors();	
 
 
-	// FIXME quitar de aqui porque es dependiente del dominio!!!! from RDF 
 		public void updatesAuthorInformation(Model model){
 			// take the authors of the RO and update the matrix of author
 			List<String> authors = getAuthors(model);
@@ -38,7 +37,6 @@ public class DAOrdf {
 			}
 		}
 		
-		//FIXME quitar de aqui porque es dependiente del dominio
 		private List<String> getAuthors(Model model) {
 			List<String> allAuthors = new ArrayList<String>();
 			List<RDFNode> list = getDCCreators(model);
@@ -48,7 +46,6 @@ public class DAOrdf {
 			return allAuthors;
 		}
 
-		//FIXME quitar de aqui porque es dependiente del dominio
 		// retrieve all the statements with dc:creator property
 		private List<RDFNode> getDCCreators(Model m) throws NullPointerException{
 			if (m == null) throw new NullPointerException("Parameter cannot be null");		
