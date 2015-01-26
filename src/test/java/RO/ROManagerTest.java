@@ -53,21 +53,6 @@ public class ROManagerTest {
 		return list;
 	}
 
-//	FIXME MOVER A LA CLASE DE TEST DEL DAO RDF
-//	@Test
-//	public void getAuthorsInformation(){
-//		Path pathDirectory = Paths.get(FILE_PATH);
-//		indexAllFilesInDirectory(pathDirectory);
-//		logger.info(list.toString());
-//		ROManager manager = new ROManager();
-//
-//		for (File f:list){
-//			// load the model
-//			Model model1 = RDFDataMgr.loadModel(f.getPath() ,Lang.TURTLE) ;
-//			manager.updatesAuthorInformation(model1);			
-//		}
-//		manager.writeResultsToFileJSON();
-//	}
 
 	private static String checkBlanks( String str ){
 		String s = str.replaceAll("\\s+",""); //str.trim();
