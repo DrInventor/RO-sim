@@ -11,13 +11,16 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+import es.oeg.om.util.XML2RO;
 import es.oeg.ro.dao.DAOAuthorsNeo4j;
 import es.oeg.ro.dao.DAOAuthorsNeo4jImp;
 import es.oeg.ro.dao.DAOauthors;
 import es.oeg.ro.dao.DAOpapers;
+import es.oeg.ro.dao.DAOrdf;
 import es.oeg.ro.transfer.ADSLabsResultsBean;
 import es.oeg.ro.transfer.Author;
 import es.oeg.ro.transfer.AuthorBSON;
@@ -141,4 +144,10 @@ public class ROManager {
 		logger.debug("Similarity between: "+get_author.toString()+" and "+get_author2.toString()+" is: "+finalSimilarity);
 		return finalSimilarity;
 	}
+
+	public void updatesAuthorInformation(Model model1) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

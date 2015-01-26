@@ -58,16 +58,16 @@ public class ParserTest {
 		XML2RO p = new XML2RO();
 			for (File file: list){
 				String name = file.getAbsolutePath();
-				logger.debug("Comenzamos a procesar el fichero: "+name);
+				logger.debug("Start processing the file: "+name);
 				try{
 					if (p.init(name))
 						p.parse();
 				}
 				finally {
-					//TODO añadir el resto de recursos agregados haciendo un
-					// p.addAgregatedResource y pasarle la lissta de documentos
+					//TODO future versions: add all the aggregated resources as 
+					// p.addAgregatedResource 
 					p.end();
-					logger.debug("Fichero creado");
+					logger.debug("File ready "+ name);
 				}
 			}		
 	}

@@ -17,39 +17,38 @@ public class DAOrdf {
 
 	private Authors listAuthors = new Authors();	
 
+	public void updatesAuthorInformation(Model model){
+		// take the authors of the RO and update the matrix of author
+		List<String> authors = getAuthors(model);
+		for (String author: authors){
+			// check if already exists
 
-		public void updatesAuthorInformation(Model model){
-			// take the authors of the RO and update the matrix of author
-			List<String> authors = getAuthors(model);
-			for (String author: authors){
-				// check if already exists
-				
-				Author auth = listAuthors.search(author); 
-				if (auth == null){
-					auth = new Author(author);
-					// TODO -> save to some db
-					listAuthors.add(auth);
-					auth.incrementPublication();
-				}
-				else
-					auth.incrementPublication();
-				
+			Author auth = listAuthors.search(author); 
+			if (auth == null){
+				auth = new Author(author);
+				// TODO -> save to some db
+				listAuthors.add(auth);
+				auth.incrementPublication();
 			}
-		}
-		
-		private List<String> getAuthors(Model model) {
-			List<String> allAuthors = new ArrayList<String>();
-			List<RDFNode> list = getDCCreators(model);
-			for (RDFNode node : list){
-				allAuthors.add(node.asLiteral().getString());
-			}
-			return allAuthors;
-		}
+			else
+				auth.incrementPublication();
 
-		// retrieve all the statements with dc:creator property
-		private List<RDFNode> getDCCreators(Model m) throws NullPointerException{
-			if (m == null) throw new NullPointerException("Parameter cannot be null");		
-			return m.listObjectsOfProperty(dCTermsProperty).toList();		
 		}
-		
+	}
+
+	private List<String> getAuthors(Model model) {
+		List<String> allAuthors = new ArrayList<String>();
+		List<RDFNode> list = getDCCreators(model);
+		for (RDFNode node : list){
+			allAuthors.add(node.asLiteral().getString());
+		}
+		return allAuthors;
+	}
+
+	// retrieve all the statements with dc:creator property
+	private List<RDFNode> getDCCreators(Model m) throws NullPointerException{
+		if (m == null) throw new NullPointerException("Parameter cannot be null");		
+		return m.listObjectsOfProperty(dCTermsProperty).toList();		
+	}
+
 }

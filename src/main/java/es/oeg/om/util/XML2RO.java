@@ -23,7 +23,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import es.oeg.om.util.exceptions.BreakParsingException;
 
@@ -87,19 +89,6 @@ public class XML2RO extends DefaultHandler{
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-
-	/*
-	 * procesamos el fichero original:
-	 * hay que coger:
-	 * <http://purl.org/net/ro-motifPaper> a ro:ResearchObject,
-	 * dc:creator <http://delicias.dia.fi.upm.es/members/DGarijo/#me>;
-		dc:title "Common Motifs in Scientific Workflows: An Empirical Analysis"@en;
-	schema:creator <http://delicias.dia.fi.upm.es/members/DGarijo/#me>;
-	schema:name "Common Motifs in Scientific Workflows: An Empirical Analysis"@en;
-	ore:aggregates --> e indicar todos los ficheros que lo acompañan
-	para cada uno de los ficheros que acompañan hay que declararlo
-	<> a ro:Resource .
-	 */
 
 	/**
 	 * Atributos
@@ -185,6 +174,8 @@ public class XML2RO extends DefaultHandler{
 
 	public void parse() {
 		try {
+			authors = new ArrayList<String>();
+
 			parserStack.push(new StartReceiver());
 			InputStream ficEntrada=null;
 			if ((ficEntrada=new FileInputStream(xmlFilename)) != null)
@@ -193,7 +184,7 @@ public class XML2RO extends DefaultHandler{
 		} catch (SAXException e) {
 			if (e instanceof BreakParsingException) {
 				// we have broken the parsing process
-				logger.debug("Ya hemos llegado al final de contrib-group no queremos seguir");
+				logger.debug("End contrib-group");
 				createROModel(doiPaper,titlePaper,authors);
 			}
 		} catch (IOException e) {
@@ -224,14 +215,6 @@ public class XML2RO extends DefaultHandler{
 		paper.addProperty(a, roResearchObject);
 		paper.addProperty(a, oreAggregation);
 
-		//FIXME improve: add URIs of authors not strings
-		/*
-		 * dc:creator [ a dc:Agent ;						
-						foaf:name "Joe"^^http://www.w3.org/2001/XMLSchema#string
-						] ;
-		 */
-		for (String author: authors2)
-			paper.addProperty(DCTerms.creator, author);
 		
 		paper.addProperty(DCTerms.title, titlePaper2);
 		Property oreAggregates = model.createProperty(ore+"aggregates");
@@ -241,6 +224,19 @@ public class XML2RO extends DefaultHandler{
 		
 		String resourcePDF = URITitle +safeNamefromString(titlePaper2)+".pdf";		
 		Resource pdf = model.createResource(resourcePDF).addProperty(a, roResource);
+		
+		/* Authors of the PDF not the RO
+		 * dc:creator [ a dc:Agent ;						
+						foaf:name "Joe"^^http://www.w3.org/2001/XMLSchema#string
+						] ;
+		 */
+		for (String author: authors2){			
+			Resource authorR = model.createResource();
+			authorR.addProperty(RDF.type, DCTerms.Agent);
+			authorR.addLiteral(FOAF.name, author);			
+			pdf.addProperty(DCTerms.creator, authorR);
+		}
+		
 		paper.addProperty(oreAggregates, pdf);
 		
 
@@ -268,10 +264,10 @@ public class XML2RO extends DefaultHandler{
 	}
 
 	public void end() {
-		logger.debug("Resultado final de las variables: ");
-		logger.debug("doi del artículo: "+doiPaper);
-		logger.debug("tittle del paper: "+titlePaper);
-		logger.debug("lista de autores: "+authors.toString());
+		logger.debug("Summary: ");
+		logger.debug("doi: "+doiPaper);
+		logger.debug("tittle: "+titlePaper);
+		logger.debug("authors: "+authors.toString());
 		modelToFile();
 	}
 
@@ -287,13 +283,13 @@ public class XML2RO extends DefaultHandler{
 		@Override
 		Receiver processData(String name, Attributes attrs) {
 			// ¿ se hace algo con el documento ?
-			logger.debug("Etiqueta :"+name);
+			logger.debug("Tag :"+name);
 			return new MetaReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			logger.debug("Fin de Etiqueta :"+name);
+			logger.debug("Tag's end:"+name);
 			contenido = new String();
 		}
 
@@ -320,17 +316,17 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			logger.debug("procesamos doi");
+			logger.debug("start processing doi");
 			return null;
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			logger.info("doi del artículo: "+contenido);
+			logger.info("doi: "+contenido);
 			doiPaper = contenido;						
 			// si aquí lo hemos usado habría que vaciarlo
 			contenido = new String();
-			logger.debug(this.getClass().getCanonicalName()+" estado de la pila "+parserStack.toString());
+			logger.debug(this.getClass().getCanonicalName()+" status "+parserStack.toString());
 		}
 
 	}
@@ -339,13 +335,13 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			logger.debug("Etiqueta :"+name);
+			logger.debug("Tag :"+name);
 			return new FrontReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			logger.debug("Fin de la Etiqueta :"+name);
+			logger.debug("Tag's end:"+name);
 		}
 
 	}
@@ -354,13 +350,13 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		Receiver processData(String name, Attributes attrs) {
-			logger.debug("Etiqueta :"+name);
+			logger.debug("Tag :"+name);
 			return new TitleGroupReceiver();
 		}
 
 		@Override
 		void finishProcessData(String name) {
-			logger.debug("Fin de la Etiqueta :"+name);			
+			logger.debug("Tag's end:"+name);
 		}}
 
 	private class TitleGroupReceiver extends Receiver{
@@ -374,7 +370,7 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		void finishProcessData(String name) {
-			logger.debug("Fin de la Etiqueta :"+name);
+			logger.debug("Tag's end:"+name);
 			parserStack.push(new ContribGroupReceiver());
 			logger.debug("estado de la pila "+parserStack.toString());
 		}}
@@ -402,6 +398,7 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		void finishProcessData(String name) {
+			contenido = new String();
 		}
 
 	}
@@ -446,8 +443,8 @@ public class XML2RO extends DefaultHandler{
 
 		@Override
 		void finishProcessData(String name) {
-			logger.info("Fin de la etiqueta S");
-			logger.info("contenido: "+contenido);
+			logger.debug("Tag's end S");
+			logger.info("content: "+contenido);
 			fileName =  contenido;
 			titlePaper = contenido;
 		}
@@ -458,8 +455,7 @@ public class XML2RO extends DefaultHandler{
 		
 		if (name == null || name.isEmpty()){
 			throw new IllegalArgumentException("parameter must not be null or empty, actual vale: '" + name + "'");
-		}
-		
+		}		
 		// 1. camel case
 		String camelCased = "";
 		String[] tokens = name.split("\\s");
@@ -482,19 +478,4 @@ public class XML2RO extends DefaultHandler{
 		return result.replaceAll("[^a-zA-Z0-9]", "");
 	}
 
-	// EJEMPLO DE USO
-	public static void main(String[] args) {
-		XML2RO p = new XML2RO();
-		try{
-			if (p.init("src/test/resources/old/A Data-driven Approach for Real-Time Clothes Simulation.xml")){
-				p.parse();
-			}
-		}
-		finally {
-			p.end();
-			p.modelToFile();
-		}
-	}
-
-	
 }
