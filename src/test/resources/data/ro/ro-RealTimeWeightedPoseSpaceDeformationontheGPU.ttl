@@ -1,0 +1,27 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/RealTimeWeightedPoseSpaceDeformationOnTheGPU-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.1111/j.1467-6346.2008.01649.x>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Real-Time Weighted Pose-Space Deformation on the GPU" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/RealTimeWeightedPoseSpaceDeformationOnTheGPU-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/RealTimeWeightedPoseSpaceDeformationOnTheGPU.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/RealTimeWeightedPoseSpaceDeformationOnTheGPU.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "J. P. Lewis"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Taehyun Rhee"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Ulrich Neumann"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

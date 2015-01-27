@@ -1,0 +1,23 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/AutomaticRiggingAndAnimationOf3DCharacters-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.1145/1275808.1276467>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Automatic Rigging and Animation of 3D Characters" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/AutomaticRiggingAndAnimationOf3DCharacters-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/AutomaticRiggingAndAnimationOf3DCharacters.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/AutomaticRiggingAndAnimationOf3DCharacters.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Ilya Baran"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Jovan Popovi"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

@@ -1,0 +1,35 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/FluidAnimationWithDynamicMeshes-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/FluidAnimationWithDynamicMeshes.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Bryan M. Klingner"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Bryan E. Feldman Nuttapong Chentanez James F. O’Brien University of California"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Bryan E. Feldman"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Nuttapong Chentanez"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              " James F. O’Brien"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://dx.doi.org/10.1145/1141911.1141961>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Fluid Animation with Dynamic Meshes" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/FluidAnimationWithDynamicMeshes-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/FluidAnimationWithDynamicMeshes.pdf> .

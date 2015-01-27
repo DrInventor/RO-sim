@@ -1,0 +1,23 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/ADatadrivenApproachForRealTimeClothesSimulation-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/ADatadrivenApproachForRealTimeClothesSimulation.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Nadia Magnenat-Thalmann"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Frederic Cordier"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://dx.doi.org/10.1111/j.1467-8659.2005.00841.x>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "A Data-driven Approach for Real-Time Clothes Simulation" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/ADatadrivenApproachForRealTimeClothesSimulation-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/ADatadrivenApproachForRealTimeClothesSimulation.pdf> .

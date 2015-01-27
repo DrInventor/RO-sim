@@ -1,0 +1,23 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/PhysicallyValidStatisticalModelsForHumanMotionGeneration.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Jianyuan Min"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Xiaolin Wei"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://dx.doi.org/10.1145/1966394.1966398>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Physically-Valid Statistical Models for Human Motion Generation" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/PhysicallyValidStatisticalModelsForHumanMotionGeneration-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/PhysicallyValidStatisticalModelsForHumanMotionGeneration.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/PhysicallyValidStatisticalModelsForHumanMotionGeneration-sdo.ttl>
+        a       ro:Resource .

@@ -1,0 +1,35 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/EfficientSimulationOfInextensibleCloth-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.1145/1276377.1276438>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Efficient Simulation of Inextensible Cloth" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/EfficientSimulationOfInextensibleCloth-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/EfficientSimulationOfInextensibleCloth.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/EfficientSimulationOfInextensibleCloth.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Rony Goldenthal"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "David Harmon"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Raanan Fattal"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Michel Bercovier"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Eitan Grinspun"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

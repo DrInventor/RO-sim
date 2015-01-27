@@ -1,0 +1,31 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/ASemiLagrangianContouringMethodForFluidSimulation-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/ASemiLagrangianContouringMethodForFluidSimulation.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "JOHN A. STRAIN"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "JAMES F. O’BRIEN"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "TOLGA G. GOKTEKIN"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "ADAM W. BARGTEIL"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://dx.doi.org/10.1145/1187112.1187281>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "A Semi-Lagrangian Contouring Method for Fluid Simulation" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/ASemiLagrangianContouringMethodForFluidSimulation-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/ASemiLagrangianContouringMethodForFluidSimulation.pdf> .

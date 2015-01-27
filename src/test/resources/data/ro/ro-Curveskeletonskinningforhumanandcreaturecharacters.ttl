@@ -1,0 +1,26 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<10.1002/cav.132>  a    ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Curve skeleton skinning for human and creature characters" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/CurveSkeletonSkinningForHumanAndCreatureCharacters-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/CurveSkeletonSkinningForHumanAndCreatureCharacters.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/CurveSkeletonSkinningForHumanAndCreatureCharacters-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/CurveSkeletonSkinningForHumanAndCreatureCharacters.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Jian J. Zhang"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Arun Somasekharan"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "By Xiaosong Yang"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

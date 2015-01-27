@@ -1,0 +1,23 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://dx.doi.org/10.1145/1201775.882308>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Building Efficient, Accurate Character Skins from Examples" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/BuildingEfficientAccurateCharacterSkinsFromExamples-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/BuildingEfficientAccurateCharacterSkinsFromExamples.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/BuildingEfficientAccurateCharacterSkinsFromExamples-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/BuildingEfficientAccurateCharacterSkinsFromExamples.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Alex Mohr"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Michael Gleicher"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

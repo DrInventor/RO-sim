@@ -1,0 +1,31 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://dx.doi.org/10.1145/1275808.1276500>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "FlowFixer: Using BFECC for Fluid Simulation" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/FlowFixerUsingBFECCForFluidSimulation-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/FlowFixerUsingBFECCForFluidSimulation.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/FlowFixerUsingBFECCForFluidSimulation-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/FlowFixerUsingBFECCForFluidSimulation.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "ByungMoon Kim"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Yingjie Liu"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Ignacio Llamas"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Jarek Rossignac"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

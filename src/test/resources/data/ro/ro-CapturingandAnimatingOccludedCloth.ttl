@@ -1,0 +1,23 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/CapturingAndAnimatingOccludedCloth-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.1145/1275808.1276420>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Capturing and Animating Occluded Cloth" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/CapturingAndAnimatingOccludedCloth-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/CapturingAndAnimatingOccludedCloth.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/CapturingAndAnimatingOccludedCloth.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Ryan White"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Keenan Crane"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

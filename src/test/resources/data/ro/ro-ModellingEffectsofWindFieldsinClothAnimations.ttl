@@ -1,0 +1,31 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://dx.doi.org/10.1007/bf01782240>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Modelling Effects of Wind Fields in Cloth Animations" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/ModellingEffectsOfWindFieldsInClothAnimations-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/ModellingEffectsOfWindFieldsInClothAnimations.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/ModellingEffectsOfWindFieldsInClothAnimations.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "M. Keckeisen"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "S. Kimmerle"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "B. Thomaszewski"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "M. Wacker"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://rohub.linkeddata.es/drinventor/ModellingEffectsOfWindFieldsInClothAnimations-sdo.ttl>
+        a       ro:Resource .

@@ -1,0 +1,28 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/CollisionResolutionsInClothSimulation-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/CollisionResolutionsInClothSimulation.pdf>
+        a           ro:Resource ;        
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Norman I. Badler"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Suejung Huh"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Dimitris N. Metaxas"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+        
+
+<http://dx.doi.org/10.1109/ca.2001.982385>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Collision Resolutions in Cloth Simulation" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/CollisionResolutionsInClothSimulation-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/CollisionResolutionsInClothSimulation.pdf> .

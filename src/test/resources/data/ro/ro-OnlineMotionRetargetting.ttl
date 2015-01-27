@@ -1,0 +1,23 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/OnlineMotionRetargetting-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.1002/1099-1778(200012)11:5<223::aid-vis236>3.3.co;2-x>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "On-line Motion Retargetting" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/OnlineMotionRetargetting-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/OnlineMotionRetargetting.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/OnlineMotionRetargetting.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Hyeong-Seok Ko"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Kwang-Jin Choi"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

@@ -1,0 +1,31 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://dx.doi.org/10.1145/2185520.2335376>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Optimizing Locomotion Controllers Using Biologically-Based Actuators and Objectives" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/OptimizingLocomotionControllersUsingBiologicallyBasedActuatorsAndObjectives-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/OptimizingLocomotionControllersUsingBiologicallyBasedActuatorsAndObjectives.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/OptimizingLocomotionControllersUsingBiologicallyBasedActuatorsAndObjectives-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/OptimizingLocomotionControllersUsingBiologicallyBasedActuatorsAndObjectives.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Jack M. Wang"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Samuel R. Hammer"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Scott L. Delp"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Vladlen Koltun"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

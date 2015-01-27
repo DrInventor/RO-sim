@@ -1,0 +1,19 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://dx.doi.org/10.1145/311535.311549>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Computational Fluid Dynamics in a Traditional Animation Environment" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/ComputationalFluidDynamicsInATraditionalAnimationEnvironment-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/ComputationalFluidDynamicsInATraditionalAnimationEnvironment.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/ComputationalFluidDynamicsInATraditionalAnimationEnvironment.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Patrick Witting"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://rohub.linkeddata.es/drinventor/ComputationalFluidDynamicsInATraditionalAnimationEnvironment-sdo.ttl>
+        a       ro:Resource .

@@ -1,0 +1,19 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/MatchingFluidSimulationElementsToSurfaceGeometryAndTopology-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/MatchingFluidSimulationElementsToSurfaceGeometryAndTopology.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Tyson Brochu ? Christopher Batty ? Robert Bridson ? University of British Columbia University of British Columbia University of British Columbia"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://dx.doi.org/10.1145/1833349.1778784>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Matching Fluid Simulation Elements to Surface Geometry and Topology" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/MatchingFluidSimulationElementsToSurfaceGeometryAndTopology-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/MatchingFluidSimulationElementsToSurfaceGeometryAndTopology.pdf> .

@@ -1,0 +1,23 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/MassConservingEulerianLiquidSimulation.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Matthias Müller"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Nuttapong Chentanez"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://rohub.linkeddata.es/drinventor/MassConservingEulerianLiquidSimulation-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.1109/tvcg.2013.19>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Mass-Conserving Eulerian Liquid Simulation" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/MassConservingEulerianLiquidSimulation-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/MassConservingEulerianLiquidSimulation.pdf> .

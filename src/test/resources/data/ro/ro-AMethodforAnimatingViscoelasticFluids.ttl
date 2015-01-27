@@ -1,0 +1,27 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/AMethodForAnimatingViscoelasticFluids-sdo.ttl>
+        a       ro:Resource .
+
+<http://rohub.linkeddata.es/drinventor/AMethodForAnimatingViscoelasticFluids.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Tolga G. Goktekin"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Adam W. Bargteil"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "James F. O’Brien"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+
+<http://dx.doi.org/10.1145/1015706.1015746>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "A Method for Animating Viscoelastic Fluids" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/AMethodForAnimatingViscoelasticFluids-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/AMethodForAnimatingViscoelasticFluids.pdf> .

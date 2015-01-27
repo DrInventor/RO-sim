@@ -1,0 +1,27 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/FluidSimulationUsingLaplacianEigenfunctions-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.1145/2077341.2077351>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Fluid Simulation using Laplacian Eigenfunctions" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/FluidSimulationUsingLaplacianEigenfunctions-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/FluidSimulationUsingLaplacianEigenfunctions.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/FluidSimulationUsingLaplacianEigenfunctions.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "EUGENE FIUME"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "CHRISTIAN LESSIG"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "TYLER DE WITT"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

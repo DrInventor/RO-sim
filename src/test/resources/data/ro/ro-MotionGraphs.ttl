@@ -1,0 +1,27 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://rohub.linkeddata.es/drinventor/MotionGraphs-sdo.ttl>
+        a       ro:Resource .
+
+<http://dx.doi.org/10.2172/7134495>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Motion Graphs" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/MotionGraphs-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/MotionGraphs.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/MotionGraphs.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Lucas Kovar"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Michael Gleicher"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Frédéric Pighin"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .

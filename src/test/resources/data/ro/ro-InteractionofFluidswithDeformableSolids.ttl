@@ -1,0 +1,35 @@
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ro:    <http://purl.org/wf4ever/ro#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+<http://dx.doi.org/10.1002/cav.18>
+        a               ore:Aggregation , ro:ResearchObject ;
+        dc:title        "Interaction of Fluids with Deformable Solids" ;
+        ore:aggregates  <http://rohub.linkeddata.es/drinventor/InteractionOfFluidsWithDeformableSolids-sdo.ttl> , <http://rohub.linkeddata.es/drinventor/InteractionOfFluidsWithDeformableSolids.pdf> .
+
+<http://rohub.linkeddata.es/drinventor/InteractionOfFluidsWithDeformableSolids.pdf>
+        a           ro:Resource ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Matthias Muller"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] .
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Simon Schirm"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Matthias Teschner"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Bruno Heidelberger"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+        dc:creator  [ a       dc:Agent ;
+                      <http://xmlns.com/foaf/0.1/name>
+                              "Markus Gross"^^<http://www.w3.org/2001/XMLSchema#string>
+                    ] ;
+
+<http://rohub.linkeddata.es/drinventor/InteractionOfFluidsWithDeformableSolids-sdo.ttl>
+        a       ro:Resource .
